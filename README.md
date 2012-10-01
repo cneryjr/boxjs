@@ -12,6 +12,8 @@ It's create a Dynamic Web Project in eclipse. Follow [this](http://besthowtodo.c
 #### 2nd Step 
 Copy directory 'boxjs' into the directory /WEB-INF and copy the files boxjs.jar and js.jar  to /WEB-INF/lib, as shown in the figure below.
 
+![Softbox F01](https://raw.github.com/cneryjr/boxjs/master/docs/images/tutorial_fig01.png)
+
 Configure web.xml file with following configuration:
 
 ``` xml
