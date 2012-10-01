@@ -10,7 +10,9 @@ It allows code written in JavaScript to be interpreted by the Web server, the sa
 It's create a Dynamic Web Project in eclipse. Follow [this](http://besthowtodo.com/blog/2010/05/how-to-create-dynamic-web-project-in-eclipse.html) tutorial.
 
 #### 2nd Step 
-Configure the web.xml with following configuration:
+Copy directory 'boxjs' into the directory /WEB-INF and copy the files boxjs.jar and js.jar  to /WEB-INF/lib, as shown in the figure below.
+
+Configure web.xml file with following configuration:
 
 ``` xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -43,3 +45,9 @@ Configure the web.xml with following configuration:
 	</welcome-file-list>
 </web-app>
 ```
+
+#### 3 th Step
+Start the project in eclipse and open the following URL in the browser http://localhost:8080/tutorial/boxjs/hello.js?param1=test
+
+Have fun!
+
