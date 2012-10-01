@@ -14,6 +14,8 @@ Copy directory 'boxjs' into the directory /WEB-INF and copy the files boxjs.jar 
 
 ![Softbox F01](https://raw.github.com/cneryjr/boxjs/master/docs/images/tutorial_fig01.png)
 
+
+#### 3rd Step
 Configure web.xml file with following configuration:
 
 ``` xml
@@ -48,7 +50,15 @@ Configure web.xml file with following configuration:
 </web-app>
 ```
 
-#### 3 th Step
+#### 4th Step
+Select the project 'tutorial' tab 'Project Explorer' and press the "Alt + Enter".
+Select the "Java Build Path" in the left pane and then select the tab "Order and Export".
+Select the combobox related to "Web App Libraries" and click "OK".
+
+![Softbox F02](https://raw.github.com/cneryjr/boxjs/master/docs/images/tutorial_fig02.png)
+
+
+#### 5th Step
 Start the project in eclipse and open the following URL in the browser http://localhost:8080/tutorial/boxjs/hello.js?param1=test
 
 Have fun!
