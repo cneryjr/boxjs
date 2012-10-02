@@ -7,7 +7,7 @@ function application(request) {
 	if (rest.match(/.*?\.js$/g) != null) {
 		log.info("Running script " + rest);
 		global.queryString = request.queryString;
-		runScript(config.applicationRoot + rest);
+		load(rest);
 	} else {
 		response.setContentType("text/html");
 		response.write("<H1>boxJS is running!</H1>");

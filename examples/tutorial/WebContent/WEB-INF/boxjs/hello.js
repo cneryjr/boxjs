@@ -1,6 +1,6 @@
 var response = global.response;
 var msg = " xxx ", x = {nome: "Pedro Paulo", idade: 8, cidade: "Uberlandia"};
-var qrys = parseParams(new String(global.queryString));
+var qrys = parseParams(global.queryString);
 
 
 print(JSON.stringify(qrys));

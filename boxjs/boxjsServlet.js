@@ -31,7 +31,7 @@ function runScript(filename) {
 }
 
 function load(filename) { 
-	runScript(filename);
+	runScript(config.applicationRoot + filename);
 }
 
 function loadOnce(filename) {
@@ -66,8 +66,8 @@ function parseParams(strParams) {
 	}
 	
 	function parseParam(sparam) { 
-		//var [key,value] = sparam.split('='); 
-		//parseKey(key, value); 
+		var [key,value] = sparam.split('='); 
+		parseKey(key, value); 
 	} 
 	
 	var params = {}; 

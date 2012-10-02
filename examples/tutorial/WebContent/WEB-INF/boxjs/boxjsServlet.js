@@ -31,7 +31,7 @@ function runScript(filename) {
 }
 
 function load(filename) { 
-	runScript(filename);
+	runScript(config.applicationRoot + filename);
 }
 
 function loadOnce(filename) {
