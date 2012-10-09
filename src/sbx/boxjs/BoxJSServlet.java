@@ -60,49 +60,74 @@ public class BoxJSServlet extends GenericServlet {
 				rd.close();
 		}
 	}
+	
+	public Object require(Object fileName) { 
+		String filename = fileName.toString();
 
-	public void evaluateJavascriptFile(Context ctx, Scriptable scope, String path) throws FileNotFoundException, IOException {
-		String filename = this.getServletConfig().getServletContext().getRealPath("/WEB-INF" + path);
-		String srcName = filename.replaceAll(".*?\\\\(\\w+\\.\\w+)", "$1");
+		try {
+			Context cx = org.mozilla.javascript.ContextFactory.getGlobal().enterContext();
+			Scriptable newScope = cx.newObject(rootScope);
+		    newScope.setPrototype(rootScope);
+			ScriptableObject.putProperty(newScope, "scope", newScope);
+			ScriptableObject.putProperty(newScope, "jscontext", cx);
+
+			Object config = org.mozilla.javascript.ScriptableObject.getProperty(rootScope, "config");
+			String applicationRoot = (String) ((ScriptableObject)config).get("applicationRoot", rootScope);
+			evaluateJavascriptFile(cx, newScope, applicationRoot + filename);
+			return org.mozilla.javascript.ScriptableObject.getProperty(newScope, "exports");
+		} catch (Exception e) {
+			System.out.println("Error: " + e.getMessage());
+		} finally {
+			Context.exit();
+		}
+		return null;
+	}
+
+	public Object evaluateJavascriptFile(Context ctx, Scriptable scope, String path) throws FileNotFoundException, IOException {
+		String filename = this.getServletConfig().getServletContext().getRealPath("/WEB-INF/boxjs" + path);
+		String srcName = filename.replaceAll(".*?\\\\(\\w+\\.\\w+)", " $1");
 		FileReader rd = null;
+		Object r = null;
 		
 		if (new File(filename).exists())
-			ctx.evaluateReader(scope, rd = new FileReader(filename), srcName, 1, null);
+			r = ctx.evaluateReader(scope, rd = new FileReader(filename), srcName, 1, null);
 		if (rd != null)
 			rd.close();
+		return r;
 	}
 
 	@Override
 	public void init() throws ServletException {
-    	log.info("initializing .......................................................\n");
+    	log.info("boxJS initializing ...\n");
 
 		Context ctx = ContextFactory.getGlobal().enterContext();
 		rootScope = ctx.initStandardObjects();
 		
 	    ScriptableObject.putProperty(rootScope, "servlet", Context.javaToJS(this, rootScope));		
 	    ScriptableObject.putProperty(rootScope, "jscontext", Context.javaToJS(ctx, rootScope));
+	    ScriptableObject.putProperty(rootScope, "rootScope", Context.javaToJS(rootScope, rootScope));		
 	    ScriptableObject.putProperty(rootScope, "scope", Context.javaToJS(rootScope, rootScope));		
 	    ScriptableObject.putProperty(rootScope, "log", Context.javaToJS(log, rootScope));
 	    /*ScriptableObject.putProperty(rootScope, "servletConfig", Context.javaToJS(this.getServletConfig(), rootScope));	*/
 	    
 	    try {
 	    	log.info("loading config.js ...");
-			evaluateJavascriptFile(ctx, rootScope, "/boxjs/config.js");
+			evaluateJavascriptFile(ctx, rootScope, "/config.js");
 			
 	    	log.info("loading boxjsServlet.js ...");
-			evaluateJavascriptFile(ctx, rootScope, "/boxjs/boxjsServlet.js");
+	    	evaluateJavascriptFile(ctx, rootScope, "/boxjsServlet.js");
 		    service = (Function)rootScope.get("service", rootScope);
 			
 	    	log.info("loading database.js ...");
-			evaluateJavascriptFile(ctx, rootScope, "/boxjs/modules/database.js");
+			evaluateJavascriptFile(ctx, rootScope, "/modules/database.js");
 			
 	    	log.info("loading application.js ...");
 			@SuppressWarnings("rawtypes")
 			String appPath = (String)((Map)rootScope.get("config", rootScope)).get("entryPoint");
 			appPath = (appPath == null || appPath.isEmpty())? "/application.js" : appPath;
-			evaluateJavascriptFile(ctx, rootScope, "/boxjs" + appPath);
-	    	log.info(".js files loaded.");
-	    } catch (IOException e) {
+			evaluateJavascriptFile(ctx, rootScope, "" + appPath);
+	    	log.info(".js files loaded.");	    	
+	    } catch (Exception e) {
 			OutputStream out = new ByteArrayOutputStream();
 			e.printStackTrace(new PrintStream(out));
 	    	log.severe(e.getMessage() + ": \n" + out.toString());
@@ -110,7 +135,7 @@ public class BoxJSServlet extends GenericServlet {
 		} finally {
 			Context.exit();
 		}
-    	log.info("Initialed!\n=========================================================================================\n");	    
+    	log.info("boxJS initialed!\n=========================================================================================\n");	    
 	}
 
 	@Override
