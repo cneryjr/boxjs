@@ -1,5 +1,7 @@
-var ui = {};
 var db = {};
+var ui = {};
+var http = {};
+var utils = {};
 var global = {};
 
 /* Controla cache dos scripts */
@@ -47,62 +49,21 @@ function loadOnce(filename) {
 	}
 }
 
-function parseParams(strParams) { 
-	
-	function parseKey(skey, value) { 
-		var patt = /\w+|\[\w+\]/g; 
-		var k, key = patt.exec(skey)[0]; 
-		var m, p = params; 
-		while ((k = patt.exec(skey)) != null) { 
-			k = k.toString().replace(/\[|\]/g,""); 
-			var m = k.match(/\d+/gi); 
-			if (m != null && m.toString().length == k.length) { 
-				k = parseInt(k); p[key] = p[key] || []; 
-			} else { 
-				p[key] = p[key] || {}; 
-			} 
-			p = p[key]; key = k; 
-		} 
-		p[key] = value	.replace(/\+/g, ' ')
-						.replace(/%3A/g,":")
-						.replace(/%2C/g,",")
-						.replace(/%2B/g,"+")
-						.replace(/%25/g,'%')
-						.replace(/%3D/g,'=')
-						.replace(/%2F/g,'/'); 
-	}
-	
-	function parseParam(sparam) { 
-		var [key,value] = sparam.split('='); 
-		parseKey(key, value); 
-	} 
-	
-	var params = {}; 
-	
-	if (strParams != null && strParams != "") {
-		var arrParams = strParams.replace(/%5B/g, "[").replace(/%5D/g, "]").split('&'); 
-	
-		for (var i=0; i < arrParams.length; i++) { 
-			parseParam(arrParams[i]); 
-		} 
-	}
-
-	return params; 
-}
-
-
 function print() {
 	var args = Array.apply(null, arguments);
 	java.lang.System.out.println(args.join(""));
 }
 
 function service(request, response) {
-	var qryString = request.getReader().readLine();
-	qryString = (qryString == null || qryString.equals("")) 
-					? request.getQueryString()
-					: qryString;
-	//qryString = (qryString != null) ? qryString.replaceAll("%5B", "[").replaceAll("%5D", "]") : qryString;
+	var qryString = null;
 	
+	if (!(request.getContentType() != null && request.getContentType().startsWith("multipart/form-data"))) {
+		print("\nContentType: " + request.getContentType() + " ....................................\n");
+		qryString = request.getReader().readLine();
+		qryString = (qryString == null || qryString.equals("")) 
+						? request.getQueryString()
+						: qryString;
+	}
 	var rrequest = {
 		    version: [1, 1], /* parsed HTTP version ~ "HTTP/1.1" */
 		    method: request.getMethod(),
@@ -119,7 +80,7 @@ function service(request, response) {
 		        "if-modified-since": request.getHeader("if-modified-since") || "Fri, 28 Sep 2012 13:37:50 GMT",
 		        "cache-control": "max-age=0"
 		    },
-		    /* input: (new InputStream), / * request body stream * / */
+		    /*input: request.getInputStream(), */ /* request body stream */
 		    scheme: request.getScheme(),
 		    host: request.getServerName() || "boxjs.com.br",
 		    port: request.getServerPort(),
@@ -169,5 +130,92 @@ function service(request, response) {
 	response.setContentType(rresponse.headers["content-type"] || "text/html");
 	response.getWriter().println(rresponse.body.join(""));
 }
+
+http.parseParams = function(strParams) { 
+	
+	function parseKey(skey, value) { 
+		var patt = /\w+|\[\w+\]/g; 
+		var k, key = patt.exec(skey)[0]; 
+		var m, p = params; 
+		while ((k = patt.exec(skey)) != null) { 
+			k = k.toString().replace(/\[|\]/g,""); 
+			var m = k.match(/\d+/gi); 
+			if (m != null && m.toString().length == k.length) { 
+				k = parseInt(k); p[key] = p[key] || []; 
+			} else { 
+				p[key] = p[key] || {}; 
+			} 
+			p = p[key]; key = k; 
+		} 
+		p[key] = value	.replace(/\+/g, ' ')
+						.replace(/%3A/g,":")
+						.replace(/%2C/g,",")
+						.replace(/%2B/g,"+")
+						.replace(/%25/g,'%')
+						.replace(/%3D/g,'=')
+						.replace(/%2F/g,'/'); 
+	}
+	
+	function parseParam(sparam) { 
+		var [key,value] = sparam.split('='); 
+		parseKey(key, value); 
+	} 
+	
+	var params = {}; 
+	
+	if (strParams != null && strParams != "") {
+		var arrParams = strParams.replace(/%5B/g, "[").replace(/%5D/g, "]").split('&'); 
+	
+		for (var i=0; i < arrParams.length; i++) { 
+			parseParam(arrParams[i]); 
+		} 
+	}
+
+	return params; 
+};
+
+http.uploadFile = function(path) { 
+	var contentType = global.request.getContentType();
+	
+	if ((contentType != null) && (contentType.indexOf("multipart/form-data") >= 0)) {
+		var fin = new java.io.DataInputStream(global.request.getInputStream());
+		var formDataLength = global.request.getContentLength();
+		//byte dataBytes[] = new byte[formDataLength];
+		var dataBytes = java.lang.reflect.Array.newInstance(java.lang.Byte.TYPE, formDataLength);
+		var byteRead = 0;
+		var totalBytesRead = 0;
+		
+		while (totalBytesRead < formDataLength) {
+			byteRead = fin.read(dataBytes, totalBytesRead, formDataLength);
+			totalBytesRead += byteRead;
+		}
+	
+		var file = new java.lang.String(dataBytes);
+		var saveFile = file.substring(file.indexOf("filename=\"") + 10);
+		saveFile = saveFile.substring(0, saveFile.indexOf("\n"));
+		saveFile = saveFile.substring(saveFile.lastIndexOf("\\") + 1, saveFile.indexOf("\""));
+		
+		var lastIndex = contentType.lastIndexOf("=");
+		var boundary = contentType.substring(lastIndex + 1, contentType.length());
+		var pos;
+		
+		pos = file.indexOf("filename=\"");
+		pos = file.indexOf("\n", pos) + 1;
+		pos = file.indexOf("\n", pos) + 1;
+		pos = file.indexOf("\n", pos) + 1;
+
+		var boundaryLocation = file.indexOf(boundary, pos) - 4;
+		var startPos = ((file.substring(0, pos)).getBytes()).length;
+		var endPos = ((file.substring(0, boundaryLocation)).getBytes()).length;
+		print("File Path: " + path + saveFile + "\n");
+		var ff = new java.io.File(path + saveFile);
+		
+		var fileOut = new java.io.FileOutputStream(ff);
+		fileOut.write(dataBytes, startPos, (endPos - startPos));
+		fileOut.flush();
+		fileOut.close();
+	}
+};
+
 
 print("boxjsServlet.js loaded...........................................");

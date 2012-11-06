@@ -36,8 +36,8 @@ public class BoxJSServlet extends GenericServlet {
 		HttpServletRequest request = (HttpServletRequest) rrequest;
 		HttpServletResponse response = (HttpServletResponse) rresponse;
 		Scriptable scope;
-		FileReader rd = null;
 
+		//System.out.println("global: " + rootScope.get("global", rootScope));
 		try {
 			Context jcx = ContextFactory.getGlobal().enterContext();
 			synchronized (rootScope) {
@@ -56,8 +56,6 @@ public class BoxJSServlet extends GenericServlet {
 			log.severe("Servlet Error (" + e.getClass() + ")" + e.getMessage() + "\nuri: " + request.getRequestURI());
 		} finally {
 			Context.exit();
-			if (rd != null)
-				rd.close();
 		}
 	}
 	
