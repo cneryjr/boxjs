@@ -1,8 +1,8 @@
-
+/** @namespace Agrupa funcionalidades relativas ao servidor de banco de dados. */
 db.Database = {
 
 	conn: null,
-	
+
 	pstmt: null,
 	
 	initialize: function() {
@@ -14,6 +14,12 @@ db.Database = {
 	    db.Database.conn.prepareStatement("DO 1"); 
 	},
 	
+	/**
+	 * Define o modo de opera&ccedil;&atilde;o da conex&atilde;o com rela&ccedil;&atilde;o 
+	 * ao commit dos comandos SQL, auto-commit <i>true</i> ou <i>false</i>.
+	 * @param {boolean} enabled Flag que define o commit autom&aacute;tico ou n&atilde;o 
+	 * dos comandos SQL após execu&ccedil;&atilde;o.
+	 */	
 	setAutoCommit: function(enabled){
 		db.Database.conn.setAutoCommit(enabled);
 	},
@@ -33,6 +39,13 @@ db.Database = {
 		return db.Database.conn.setSavepoint();
 	},
 
+	/**
+	 * Executa um <i>statement</i> SQL (DML).
+	 * @param {string} sql O comando SQL a ser executado.
+	 * @returns {Object} No caso do comando ser um SELECT retorna um array de objetos
+	 * ou caso contr&aacute;rio um objeto com a propriedade <i>error<i> valorada com um booleano 
+	 * <i>true<i> ou <i>false<i> de acordo com o resultado da execu&ccedil;&atilde;o do comando SQL.
+	 */	
 	execute: function(sql) {
 		var stmt = null;
 		
@@ -82,9 +95,9 @@ db.Database = {
 	        
 	    } else {
 			java.lang.System.out.println("SQL: " + sql);
-	    	var result = stmt.executeUpdate(sql);
 	        try {
-	            rows = {error: !result};
+		    	var result = stmt.executeUpdate(sql);
+	            rows = {error: false, affectedRows: result};
 	        } catch (e) {
 	            rows = {error: true, exception: e, message: e.message};
 	        }
@@ -96,6 +109,13 @@ db.Database = {
 
 
 //..........................................................................................................................
+/**
+* Table &eacute; uma classe que representa uma tabela (entidade) de um banco de dados, 
+* encapsulando m&eacute;todos de manipula&ccedil;&aacute;o da tabela, tais como, INSET, UPDATE, DELETE e 
+* SELECT. 
+* @param {string} tblName O nome da tabela a ser manipulada.
+* @constructor
+*/
 db.Table = function (tblName) {
     this.tableName = tblName;
 };
