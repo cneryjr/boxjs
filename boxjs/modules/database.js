@@ -70,15 +70,22 @@ db.Database = {
 	        var rs = stmt.executeQuery(sql);
 	        var rsmd = rs.getMetaData();
 	        var numColumns = rsmd.getColumnCount();
+	        var columns = [];
 	        rows = new Array();
-	
+
+            for (var cl = 1; cl < numColumns + 1; cl++)
+            	columns[cl] = rsmd.getColumnLabel(cl);
+	        
 	        while (rs.next()) {
 	            var row = {};
 	
 	            for (var i = 1; i < numColumns + 1; i++) {
-	                var column_name = rsmd.getColumnLabel(i);
+	                //var column_name = rsmd.getColumnLabel(i);
+	                //var value = rs.getObject(i);
+	                //row[column_name] = (rs.wasNull()) ? null : new String(value.toString());
+
 	                var value = rs.getObject(i);
-	                row[column_name] = (rs.wasNull()) ? null : new String(value.toString());
+	                row[columns[i]] = (rs.wasNull()) ? null : new String(value.toString());
 	            } //end for
 	
 	            rows.push(row);
