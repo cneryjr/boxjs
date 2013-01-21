@@ -1,27 +1,17 @@
 /** @namespace Agrupa funcionalidades relativas ao servidor de banco de dados. */
 db.Database = {
 
-	/*conn: null,*/
+	conn: null,
 
 	pstmt: null,
 	
-	getConnection: function() {
-		return ds.getConnection();
-	},
-	
 	initialize: function() {
-		/*var dbc = config.database;
-		
-		if (dbc.pooling == true) {
-			db.Database.conn = ds.getConnection();
-			this.getConnection();
-		} else {
-			log.info("Driver: " + dbc.driver);
-			log.info("Driver: " + dbc.url);
-	    	java.lang.Class.forName("com.mysql.jdbc.Driver");
-	    	db.Database.conn = java.sql.DriverManager.getConnection(dbc.url, dbc.user || "root", dbc.pass || "");
-		}*/
-	    /*db.Database.conn.prepareStatement("DO 1");*/ 
+		var dbc = config.database;
+		log.info("Driver: " + dbc.driver);
+		log.info("Driver: " + dbc.url);
+    	java.lang.Class.forName("com.mysql.jdbc.Driver");
+    	db.Database.conn = java.sql.DriverManager.getConnection(dbc.url, dbc.user || "root", dbc.pass || "");
+	    db.Database.conn.prepareStatement("DO 1"); 
 	},
 	
 	/**
@@ -30,24 +20,24 @@ db.Database = {
 	 * @param {boolean} enabled Flag que define o commit autom&aacute;tico ou n&atilde;o 
 	 * dos comandos SQL após execu&ccedil;&atilde;o.
 	 */	
-	/*setAutoCommit: function(enabled){
+	setAutoCommit: function(enabled){
 		db.Database.conn.setAutoCommit(enabled);
-	},*/
+	},
 	
-	/*commit: function() {
+	commit: function() {
 		db.Database.conn.commit();
-	},*/
+	},
 
-	/*rollback: function(savePoint) {
+	rollback: function(savePoint) {
 		if (savePoint != undefined)
 			db.Database.conn.rollback(savePoint);
 		else
 			db.Database.conn.rollback();
-	},*/
+	},
 	
-	/*setSavepoint: function() {
+	setSavepoint: function() {
 		return db.Database.conn.setSavepoint();
-	},*/
+	},
 
 	/**
 	 * Executa um <i>statement</i> SQL (DML).
@@ -57,10 +47,13 @@ db.Database = {
 	 * <i>true<i> ou <i>false<i> de acordo com o resultado da execu&ccedil;&atilde;o do comando SQL.
 	 */	
 	execute: function(sql) {
-		var conn = this.getConnection();
-		var stmt = conn.createStatement();
+		var stmt = null;
 		
-	    /*try {
+	    if (db.Database.conn == null) {
+	        db.Database.initialize();
+	    }
+	    
+	    try {
 		    stmt =  db.Database.conn.createStatement();
 	    	stmt.executeUpdate("DO 1");
 	    } catch (e) {
@@ -68,7 +61,7 @@ db.Database = {
 	    	//db.Database.conn = servlet.connectDB();
 	    	this.initialize();
 	    	stmt =  db.Database.conn.createStatement();
-	    }*/
+	    }
 	    
 	    var rows = new Array();
 	    sql = sql.trim();
@@ -97,8 +90,6 @@ db.Database = {
 	
 	            rows.push(row);
 	        }
-	        
-	        try { if(null != rs) rs.close(); } catch (e) { e.printStackTrace(); }
 	
 	    } else if (sql.toUpperCase().indexOf("INSERT") == 0) {
 	        stmt.executeUpdate(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
@@ -110,7 +101,7 @@ db.Database = {
 	        }            
 	        
 	    } else {
-			//java.lang.System.out.println("SQL: " + sql);
+			java.lang.System.out.println("SQL: " + sql);
 	        try {
 		    	var result = stmt.executeUpdate(sql);
 	            rows = {error: false, affectedRows: result};
@@ -118,15 +109,7 @@ db.Database = {
 	            rows = {error: true, exception: e, message: e.message};
 	        }
 	    }
-	    //stmt.close();
-        try { if(null != stmt) stmt.close(); } catch (e) { e.printStackTrace(); }
-        try { 
-        	if(null != conn) {
-        		conn.close();
-        		conn = null;
-        	}
-        } catch (e) {e.printStackTrace();}
- 	    
+	    stmt.close();
 	    return rows;
 	}
 };
@@ -145,7 +128,7 @@ db.Table = function (tblName) {
 };
 
 db.Table.execute = function(sql) {
-    //java.lang.System.out.println(sql);
+    java.lang.System.out.println(sql);
     return db.Database.execute(sql);
 };
 
@@ -258,4 +241,4 @@ db.Table.prototype.all =  function() {
 
 
 //..........................................................................................................................
-java.lang.System.out.println("database.pool.js loaded..............................................");
+print("database.js loaded..............................................");

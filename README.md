@@ -1,4 +1,4 @@
-boxJS v0.2.5
+boxJS v0.2.6
 ============
 
 boxJS is a container for the application / interpretation JavaScript from the Web server, or is a Server-side JavaScript or (SSJS).
