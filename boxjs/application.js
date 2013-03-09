@@ -24,7 +24,7 @@ function application(request) {
 		 * defined within the file, using an object called "actions" too. */
 		var act = rest.replace(/actions\/(\w+)/g, "$1");
 		var actions = require("actions.js").actions;
-		actions[act](http.parseParams(request.queryString), request);
+		actions[act](http.parseParams(decodeURI(request.queryString || "")), request, response);
 	} else {
 		response.setContentType("text/html");
 		response.write("<H1>boxJS is running!</H1>");

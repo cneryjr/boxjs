@@ -3,6 +3,12 @@ var db = {};
 /** @namespace */
 var ui = {};
 /** @namespace */
+var binary = {};
+/** @namespace */
+var io = {};
+/** @namespace */
+var ws = {};
+/** @namespace */
 var utils = {};
 /** @namespace */
 var global = {};
@@ -21,16 +27,11 @@ function require(filename) {
 	return servlet.require(filename);
 }
 
-function load(filename) { 
-	//return runScript(global.scope, config.applicationRoot + filename);
-	return servlet.runScript(config.applicationRoot + filename, global.request, global.scope);
-}
-
-function loadOnce(filename) {
-	if (!scripts[filename]) {
-		//runScript(global.scope, filename);
-		return servlet.runScript(config.applicationRoot + filename, global.request, global.scope);
-	}
+function load(filename) {
+    if (!scripts[filename]) {
+        //scripts[filename] = true;
+        return servlet.runScript(config.applicationRoot + filename, global.request, global.scope);
+    }
 }
 
 function print() {

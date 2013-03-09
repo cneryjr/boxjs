@@ -9,18 +9,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.naming.InitialContext;
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Function;
@@ -28,7 +29,6 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 import sun.misc.IOUtils;
-
 
 public class BoxJSServlet extends GenericServlet {
 	private static final long serialVersionUID = -1L;
@@ -97,13 +97,13 @@ public class BoxJSServlet extends GenericServlet {
 		Object ret = null;
 		String srcName = null;
 		Context ctx = null;
-		
+
 		try {
-			if (cache.get(filename) == null) {
-				String filePath = "/WEB-INF/boxjs" + filename;
+			if (isDeveloperMode() || cache.get(filename) == null) {
+				String filePath = "/boxjs" + filename;
 				filePath = request.getServletContext().getRealPath(filePath);
 				srcName = filePath.replaceAll(".*?\\\\(\\w+\\.\\w+)", "$1");
-				//System.out.println("loading(" + filename + ")....................................................");
+				System.out.println("loading(" + filename + ")....................................................");
 		        cache.put(filename, new String(IOUtils.readFully(new FileInputStream(filePath), -1, true)));
 			}
 			ctx = Context.enter();
@@ -119,9 +119,16 @@ public class BoxJSServlet extends GenericServlet {
 		return org.mozilla.javascript.Context.toString(ret);
 	}
 
+	@SuppressWarnings("rawtypes")
+	private boolean isDeveloperMode() {
+		Map config = (Map)rootScope.get("config", rootScope);
+		Boolean developerMode = (Boolean) config.get("developerMode");
+		return developerMode != null && developerMode;
+	}
+
 
 	public Object evaluateJavascriptFile(Context ctx, Scriptable scope, String path) throws FileNotFoundException, IOException {
-		String filename = this.getServletConfig().getServletContext().getRealPath("/WEB-INF/boxjs" + path);
+		String filename = this.getServletConfig().getServletContext().getRealPath("/boxjs" + path);
 		String srcName = filename.replaceAll(".*?\\\\(\\w+\\.\\w+)", " $1");
 		FileReader rd = null;
 		Object r = null;
@@ -138,8 +145,7 @@ public class BoxJSServlet extends GenericServlet {
 	public void init() throws ServletException {
     	log.info("boxJS initializing ...\n");
 
-    	Map config, dbmap;
-    	Object aux;
+    	Map config;
 		Context ctx = ContextFactory.getGlobal().enterContext();
 		rootScope = ctx.initStandardObjects();
 		
@@ -153,42 +159,24 @@ public class BoxJSServlet extends GenericServlet {
 	    	log.info("loading config.js ...");
 			evaluateJavascriptFile(ctx, rootScope, "/config.js");
 			
-	    	log.info("loading boxjsServlet.js ...");
-	    	evaluateJavascriptFile(ctx, rootScope, "/boxjsServlet.js");
+	    	log.info("loading platform.js ...");
+	    	evaluateJavascriptFile(ctx, rootScope, "/platform.js");
 		    service = (Function)rootScope.get("service", rootScope);
 			
 		    config = (Map)rootScope.get("config", rootScope);
 		    		
-			if ((Boolean) (dbmap = (Map) config.get("database")).get("pooling")) {
-				log.info("initializing db connection pool ...");
-				PoolProperties pp = new PoolProperties();
-				pp.setDriverClassName(dbmap.get("driver").toString()); //"com.mysql.jdbc.Driver");
-				pp.setUrl(dbmap.get("url").toString()); //"jdbc:mysql://localhost:3306/mysql");
-				pp.setUsername(dbmap.get("user").toString());
-				pp.setPassword(((aux = dbmap.get("password")) == null) ? null : aux.toString());
-				pp.setMaxActive(((aux = dbmap.get("maxActive")) == null) ? 100 : new Integer(aux.toString()));
-				pp.setInitialSize(((aux = dbmap.get("initialSize")) == null) ? 50 : new Integer(aux.toString()));
-				
-				ds = new DataSource(pp);
-				ds.setDefaultAutoCommit(((aux = dbmap.get("defaultAutoCommit")) == null) ? true : (Boolean)aux);
-			    ScriptableObject.putProperty(rootScope, "ds", Context.javaToJS(ds, rootScope));
-				log.info("db connection pool initialized.");
-
-		    	log.info("loading database.pool.js ...");
-				evaluateJavascriptFile(ctx, rootScope, "/modules/database.js");
-			} else {
-		    	log.info("loading database.js ...");
-		    	java.lang.Class.forName(dbmap.get("driver").toString());
-				evaluateJavascriptFile(ctx, rootScope, "/modules/database.without.pool.js");
-			}			
+			loadDatabaseModule(config, ctx);	
+			loadBinaryModule(config, ctx);	
+			loadIOModule(config, ctx);	
+			loadWebServiceModule(config, ctx);
+			
+			loadLibs(config, ctx);
+			
 	    	log.info("loading application.js ...");
 			String appPath = (String)(config).get("entryPoint");
 			appPath = (appPath == null || appPath.isEmpty())? "/application.js" : appPath;
 			evaluateJavascriptFile(ctx, rootScope, "" + appPath);
 	    	log.info(".js files loaded.");	
-	    	
-			log.info("Defining cache script...");
-			ctx.evaluateString(rootScope, "var cache = {};\n", " BoxJSServlet: line 149 ", 1, null);	    
 	    	
 	    } catch (Exception e) {
 			OutputStream out = new ByteArrayOutputStream();
@@ -199,6 +187,88 @@ public class BoxJSServlet extends GenericServlet {
 			Context.exit();
 		}
     	log.info("boxJS initialed!\n=========================================================================================\n");	    
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void loadLibs(Map config, Context ctx) throws Exception {
+		List libs = (List) config.get("lib");
+		
+		if (libs == null) {
+			return;
+		}
+		
+		for (Object obj : libs) {
+			String libJS = obj.toString();
+			log.info("loading lib " + libJS + "...");
+			evaluateJavascriptFile(ctx, rootScope, "/lib/" + libJS);
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	private boolean loadModule(Map config, String module) {
+		List modules = (List) config.get("modules");
+		if (modules != null) {
+			return modules.contains(module);
+		}
+		
+		return false;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void loadDatabaseModule(Map config, Context ctx) throws Exception {
+		if (!loadModule(config, "database")) {
+			return;
+		}
+		
+		Map dbmap = (Map) config.get("database");
+		String datasource = (String) dbmap.get("datasource");
+		if (datasource != null) {
+			log.info("initializing db connection pool ...");
+			
+			InitialContext initContext = new InitialContext();  
+			javax.naming.Context envContext  = (javax.naming.Context)initContext.lookup("java:/comp/env");  
+            DataSource ds = (DataSource)envContext.lookup(datasource);  
+            
+		    ScriptableObject.putProperty(rootScope, "ds", Context.javaToJS(ds, rootScope));
+			log.info("db connection pool initialized.");
+
+			log.info("loading database.pool.js ...");
+			evaluateJavascriptFile(ctx, rootScope, "/modules/database.js");
+		} else {
+			log.info("loading database.js ...");
+			java.lang.Class.forName(dbmap.get("driver").toString());
+			evaluateJavascriptFile(ctx, rootScope, "/modules/database.without.pool.js");
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void loadIOModule(Map config, Context ctx) throws Exception {
+		if (!loadModule(config, "io")) {
+			return;
+		}
+		
+		log.info("loading io.js ...");
+		evaluateJavascriptFile(ctx, rootScope, "/modules/io.js");
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void loadWebServiceModule(Map config, Context ctx) throws Exception {
+		if (!loadModule(config, "webservice")) {
+			return;
+		}
+		
+		log.info("loading webservice.js ...");
+		evaluateJavascriptFile(ctx, rootScope, "/modules/webservice.js");
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void loadBinaryModule(Map config, Context ctx) throws Exception {
+		if (!loadModule(config, "binary")) {
+			return;
+		}
+		
+		log.info("loading binary.js ...");
+		evaluateJavascriptFile(ctx, rootScope, "/modules/binary.js");
 	}
 
 	@Override
