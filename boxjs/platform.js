@@ -12,6 +12,14 @@ var ws = {};
 var utils = {};
 /** @namespace */
 var global = {};
+/** @namespace */
+var safe = {
+	isItSafe: function() {
+		return true;
+	},
+	onError: function(){
+	}
+};
 
 /** Controla cache dos scripts */
 var scripts = {}; 
@@ -40,10 +48,6 @@ function print() {
 	var args = Array.apply(null, arguments);
 	java.lang.System.out.println(args.join(""));
 }
-
-var console = {
-		log: print
-};
 
 function service(request, response) {
 	var qryString = null;
