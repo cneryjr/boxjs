@@ -1,4 +1,4 @@
-var safe = safe | {};
+var safe = safe || {};
 
 safe.isItSafe = function (paramsObject, request, response) {
 	var uri = new String(request.env.request.getRequestURI());
@@ -6,10 +6,10 @@ safe.isItSafe = function (paramsObject, request, response) {
 	var moduleName = p[p.length-2];
 	var methodName = p[p.length-1];	
 
-    return isUserLogged(paramsObject, request, response)
-        && isSessionValid(paramsObject, request, response)
-        && hasPermissionInThisModule(paramsObject, request, response, moduleName)
-        && hasPermissionInThisMethod(paramsObject, request, response, methodName);
+    return this.isUserLogged(paramsObject, request, response)
+        && this.isSessionValid(paramsObject, request, response)
+        && this.hasPermissionInThisModule(paramsObject, request, response, moduleName)
+        && this.hasPermissionInThisMethod(paramsObject, request, response, methodName);
 };
 
 safe.isUserLogged = function(paramsObject, request, response) {
@@ -17,7 +17,7 @@ safe.isUserLogged = function(paramsObject, request, response) {
     return true;
 };
 
-safe.isUserLogged = function (paramsObject, request, response) {
+safe.isSessionValid = function (paramsObject, request, response) {
 
     return true;
 };
