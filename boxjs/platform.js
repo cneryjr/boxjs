@@ -24,12 +24,14 @@ var scripts = {};
  * @returns {Object}
  */
 function require(filename) {
+	org.mozilla.javascript.ScriptableObject.putProperty(scope, "exports", {});
 	return servlet.require(filename);
 }
 
 function load(filename) {
     if (!scripts[filename]) {
         //scripts[filename] = true;
+    	org.mozilla.javascript.ScriptableObject.putProperty(scope, "exports", {});
         return servlet.runScript(config.applicationRoot + filename, global.request, global.scope);
     }
 }
@@ -38,6 +40,10 @@ function print() {
 	var args = Array.apply(null, arguments);
 	java.lang.System.out.println(args.join(""));
 }
+
+var console = {
+		log: print
+};
 
 function service(request, response) {
 	var qryString = null;
@@ -143,7 +149,7 @@ function service(request, response) {
 	}
 
 	//if (rresponse.headers["content-type"] == "text/html") {
-	if (["text/html", "text/xml", "text/plain", "application/json"].indexOf(rresponse.headers["content-type"]) >= 0) {
+	if (["text/html", "text/xml", "text/plain", "text/javascript", "application/json"].indexOf(rresponse.headers["content-type"]) >= 0) {
 		response.getWriter().println(rresponse.body.join(""));
 	} else {
 		response.getOutputStream().write(rresponse.body);
