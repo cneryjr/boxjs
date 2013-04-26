@@ -30,8 +30,7 @@ db.Database = {
 	 * <i>true<i> ou <i>false<i> de acordo com o resultado da execu&ccedil;&atilde;o do comando SQL.
 	 */	
 	execute: function(sql, transaction) {
-		var conn = (transaction != null ? transaction.getConnection() : this.getConnection());
-		var stmt = conn.createPrepareStatement(sql);
+		var stmt = this.createPrepareStatement(sql,transaction);
 		var result = stmt.execute();
 		stmt.close();
 		return result;
@@ -39,7 +38,12 @@ db.Database = {
 	/**
 	 * Cria um novo <i> Prepare Statement </i>
 	 * @param   {String}       sql            O comando SQL a ser executado.
-	 * @param   {Transaction} [transaction]   Transação em que será executado os comandos.
+	 * @param   {Transaction} [transaction]   Transação em que
+	 * 
+	 *  
+	 *  
+	 *  
+	 *  será executado os comandos.
 	 * @returns {Object}  Objetos com métodos execute e executeRows.  
 	 */
 	createPrepareStatement: function(sql, transaction) {
@@ -63,7 +67,8 @@ db.Database = {
 					} else {
 					    this.stmt.setObject(i+1,args[i]);
 					};
-				}				
+				}
+				print(this.stmt);
 				var rows = new Array();
 				sql = sql.trim();
 			    if (sql.toUpperCase().indexOf("SELECT") == 0) {
@@ -353,7 +358,9 @@ db.Table.prototype.update = function(row, where, transaction) {
         	vals.push(where[key]);
         }
     } else {
-    	sql += " id = " + row["id"];
+    	this.keys.forEach(function(key, idx) {
+    		sql +=  key + " = " + (row[key] || null);
+    	});
     }
     
     var stmt = db.Database.createPrepareStatement(sql, transaction);
