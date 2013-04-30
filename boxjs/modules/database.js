@@ -47,6 +47,7 @@ db.Database = {
 	 * @returns {Object}  Objetos com métodos execute e executeRows.  
 	 */
 	createPrepareStatement: function(sql, transaction) {
+		var mustClose = transaction == undefined ? true : false;
 		var conn = (transaction != null ? transaction.getConnection() : this.getConnection());
 		return {
 			stmt: conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS),
@@ -158,7 +159,8 @@ db.Database = {
 			 */
 			close: function() {
 				this.stmt.close();
-				conn.close();
+				if (mustClose)
+					conn.close();
 			}
 		};
 	}
