@@ -68,7 +68,6 @@ db.Database = {
 					    this.stmt.setObject(i+1,args[i]);
 					};
 				}
-				print(this.stmt);
 				var rows = new Array();
 				sql = sql.trim();
 			    if (sql.toUpperCase().indexOf("SELECT") == 0) {
@@ -159,6 +158,7 @@ db.Database = {
 			 */
 			close: function() {
 				this.stmt.close();
+				conn.close();
 			}
 		};
 	}

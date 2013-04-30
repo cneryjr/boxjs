@@ -150,8 +150,7 @@ public class BoxJSServlet extends GenericServlet {
             log.info("initializing db connection pool ...");
 
             InitialContext initContext = new InitialContext();
-            javax.naming.Context envContext = (javax.naming.Context) initContext.lookup("java:/comp/env");
-            DataSource ds = (DataSource) envContext.lookup(datasource);
+			DataSource ds = (DataSource)initContext.lookup(datasource);
 
             ScriptableObject.putProperty(rootScope, "ds", Context.javaToJS(ds, rootScope));
             log.info("db connection pool initialized.");
