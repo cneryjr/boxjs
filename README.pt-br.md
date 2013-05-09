@@ -1,8 +1,15 @@
-boxJS v0.2.1
+boxJS v0.3.0
 ============
 
 boxJS é um container de execução/interpretação JavaScript por parte do servidor Web, ou seja, é um Server-side JavaScript ou (SSJS).
 Ele permite a escrita em JavaScript de códigos a serem interpretados pelo servidor Web, da mesma forma como ocorre com o PHP, por exemplo.
+
+## What's new?
+
+* v.0.3.0 - Módulo de roteamento liberado.
+* v.0.2.9 - Módulo de segurança liberado.
+* v.0.2.8 - Módulo de acesso a base dados melhorado.
+* v.0.2.7 - Carga dinâmica de módulos implementada.
 
 ## Tutorial
 

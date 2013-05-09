@@ -21,6 +21,77 @@ var safe = {
 	}
 };
 
+var Router = {
+	getRoutes: {},
+	postRoutes: {},
+	putRoutes: {},
+	deleteRoutes: {},
+	add: function(virtualPath, realPath) {
+		this.getRoutes[virtualPath] = 
+		this.putRoutes[virtualPath] = 
+		this.postRoutes[virtualPath] = 
+		this.deleteRoutes[virtualPath] = realPath;
+		return this;
+	},
+	get: function(virtualPath, realPath) {
+		this.getRoutes[virtualPath] = realPath;
+		return this;
+	},
+	put: function(virtualPath, realPath) {
+		this.putRoutes[virtualPath] = realPath;
+		return this;
+	},
+	post: function(virtualPath, realPath) {
+		this.postRoutes[virtualPath] = realPath;
+		return this;
+	},
+	"delete": function(virtualPath, realPath) {
+		this.deleteRoutes[virtualPath] = realPath;
+		return this;
+	},
+	process: function(method, url, paramsObject, request, response) {
+		//var regex = new RegExp("/(?:.(?!/))+$", "g");
+		var regex = new RegExp("/(?:.(?!/.*/))+$", "g");
+		var nurl = url;
+		
+		for (var route in this[method.toLowerCase() + "Routes"]) {
+			var r = route.replace(/^\//, "");
+			if (url.indexOf(r) == 0) {
+				nurl = this[method.toLowerCase() + "Routes"][route];
+				nurl = url.replace(new RegExp("\^"+r), nurl);
+				break;
+			}
+		}
+		
+		if ( nurl.match(/.*?\.js$/g) != null) {
+			load(nurl);			
+		} if ( nurl.match(regex) != null) {
+			/*var moduleMethod = regex.exec(url)[0].replace(/^\//,"").split("/");*/
+			var moduleMethod = nurl.split("/");
+			/*var moduleName = moduleMethod[moduleMethod.length-2];*/
+			var methodName = moduleMethod[moduleMethod.length-1];
+
+			print("\n--- Router --------------------------");
+			var mm = [].concat(moduleMethod);
+			print("moduleMethod(antes): [" + nurl + "] => " + JSON.stringify(mm));
+			mm.splice(mm.length-1,1);
+			print("moduleMethod(depois): " + JSON.stringify(mm));
+			print("nurl: " + nurl);
+			print("moduleName: " + mm[mm.length-1]); //moduleName);
+			print("methodName: " + methodName);
+			print("module: " + JSON.stringify(module));
+			
+			moduleMethod.splice(moduleMethod.length-1,1);
+			var module = require(moduleMethod.join("/") + ".js");
+			
+			module[methodName](paramsObject, request, response);
+		} else {
+			response.setContentType("text/html");
+			response.write("<H1>boxJS is running!</H1>");
+		}		
+	}
+};
+
 /** Controla cache dos scripts */
 var scripts = {}; 
 
@@ -32,15 +103,21 @@ var scripts = {};
  * @returns {Object}
  */
 function require(filename) {
+	print("-- require ---------------------------\n" +  filename);	
 	org.mozilla.javascript.ScriptableObject.putProperty(scope, "exports", {});
 	return servlet.require(filename);
+	/*var exports = servlet.require(filename);
+	print("-- require ---------------------------\n" +  filename);	
+	print("-- require ---------------------------");
+	for (var att in exports)
+		print("" + att + " => " + exports[att]);*/
 }
 
 function load(filename) {
     if (!scripts[filename]) {
-        //scripts[filename] = true;
     	org.mozilla.javascript.ScriptableObject.putProperty(scope, "exports", {});
-        return servlet.runScript(config.applicationRoot + filename, global.request, global.scope);
+        /*return servlet.runScript(config.applicationRoot + filename, global.request, global.scope);*/
+        return servlet.runScript(filename, global.request, global.scope);
     }
 }
 
@@ -48,6 +125,36 @@ function print() {
 	var args = Array.apply(null, arguments);
 	java.lang.System.out.println(args.join(""));
 }
+
+function application(request) {
+	var contextPath = request.env.contextPath;
+	var uri = new String(request.env.request.getRequestURI());
+	var rest = uri.replace(contextPath, "").replace(/\/.*?\/(.*)/g, "$1");	
+	var response = request.env.response;
+	var paramsObject = http.parseParams(decodeURI(request.queryString || ""));
+
+	if (!safe.isItSafe(paramsObject, request, response)) {
+		safe.onError(paramsObject, request, response);
+	} else 
+		Router.process(request.method, rest, paramsObject, request, response);
+	
+    response.headers["content-type"] = response.getContentType();
+
+    var resp = {
+        status: 200,
+        headers: response.headers,
+        body: [response.out]
+    };
+
+    if (["text/html", "text/xml", "text/plain", "text/javascript", "application/json"].indexOf(response.getContentType()) == -1) {
+        resp.contentLength = response.out.length;
+        resp.headers = response.headers;
+        resp.body = response.out;
+    }
+
+    return resp;                    
+}
+
 
 function service(request, response) {
 	var qryString = null;
@@ -175,7 +282,7 @@ var http = {
 	 * @returns {Object}
 	 */
 	parseParams: function(strParams) { 
-		var params = {}; 
+/*		var params = {}; 
 		
 		function parseKey(skey, value) { 
 			var patt = /\w+|\[\w+\]/g; 
@@ -216,6 +323,56 @@ var http = {
 			} 
 		}
 	
+		return params; */
+		
+		var params = {};
+		
+		function parseKey(skey, value) { 
+			var patt = /\w+|\[\w*\]/g; 
+			var k, ko, key = patt.exec(skey)[0]; 
+			var p = params; 
+			while ((ko = patt.exec(skey)) != null) { 
+				k = ko.toString().replace(/\[|\]/g,""); 
+				var m = k.match(/\d+/gi); 
+				if ((m != null && m.toString().length == k.length) || ko == "[]") { 
+					k = parseInt(k); 
+					p[key] = p[key] || []; 
+				} else { 
+					p[key] = p[key] || {}; 
+				} 
+				p = p[key]; 
+				key = k; 
+			} 
+			value = value	.replace(/\+/g, ' ')
+							.replace(/%3A/g,":")
+							.replace(/%2C/g,",")
+							.replace(/%2B/g,"+")
+							.replace(/%25/g,'%')
+							.replace(/%3D/g,'=')
+							.replace(/%2F/g,'/')
+							.replace(/%3F/g,'?'); 
+			if (typeof(key) == "number" && isNaN(key))
+				p.push(value);
+			else
+				p[key] = value;
+		}
+		
+		function parseParam(sparam) { 
+			// var [key,value] = sparam.split('=');
+			// parseKey(key, value);
+			var vpar = sparam.split('=');
+			parseKey(vpar[0], vpar[1]);
+		} 
+		
+		if (strParams != null && strParams != "") {
+			// var arrParams = strParams.replace(/%5B/g, "[").replace(/%5D/g, "]").split('&');
+			var arrParams = new String(strParams).replace(/%5B/g, "[").replace(/%5D/g, "]").split('&'); 
+		
+			for (var i=0; i < arrParams.length; i++) { 
+				parseParam(arrParams[i]); 
+			} 
+		}
+
 		return params; 
 	},
 

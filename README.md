@@ -1,4 +1,4 @@
-boxJS v.0.2.9
+boxJS v.0.3.0
 ============
 
 boxJS is a container for the application / interpretation JavaScript from the Web server, or is a Server-side JavaScript or (SSJS).
@@ -6,6 +6,7 @@ It allows code written in JavaScript to be interpreted by the Web server, the sa
 
 ## What's new?
 
+* v.0.3.0 - Routing module released.
 * v.0.2.9 - Security module released.
 * v.0.2.8 - Database module improvemented.
 * v.0.2.7 - Dynamic loading of modules.

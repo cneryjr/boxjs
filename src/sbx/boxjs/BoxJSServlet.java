@@ -38,6 +38,7 @@ public class BoxJSServlet extends GenericServlet {
     Scriptable rootScope;
     DataSource ds;
     Function service;
+    Map<String, Object> debugObjects = new HashMap<String, Object>();
 
     @Override
     public void service(ServletRequest rrequest, ServletResponse rresponse)
@@ -76,15 +77,16 @@ public class BoxJSServlet extends GenericServlet {
         try {
             Context cx = org.mozilla.javascript.ContextFactory.getGlobal().enterContext();
             synchronized (rootScope) {
-                Object config = org.mozilla.javascript.ScriptableObject.getProperty(rootScope, "config");
+/*                Object config = org.mozilla.javascript.ScriptableObject.getProperty(rootScope, "config");
                 applicationRoot = (String) ((ScriptableObject) config).get("applicationRoot", rootScope);
-                newScope = cx.newObject(rootScope);
+*/                newScope = cx.newObject(rootScope);
                 newScope.setPrototype(rootScope);
             }
             ScriptableObject.putProperty(newScope, "scope", newScope);
             ScriptableObject.putProperty(newScope, "jscontext", cx);
 
-            evaluateJavascriptFile(cx, newScope, applicationRoot + filename);
+/*            evaluateJavascriptFile(cx, newScope, applicationRoot + filename);
+*/            evaluateJavascriptFile(cx, newScope, filename);
             return org.mozilla.javascript.ScriptableObject.getProperty(newScope, "exports");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -119,6 +121,14 @@ public class BoxJSServlet extends GenericServlet {
 
         return org.mozilla.javascript.Context.toString(ret);
     }
+    
+    public Object getDebugObject(String id) {
+    	return debugObjects.get(id);
+    }
+    
+    public void setDebugObject(String id, Object object) {
+    	debugObjects.put(id, object);
+    }
 
     @SuppressWarnings("rawtypes")
     private boolean isDeveloperMode() {
@@ -128,7 +138,7 @@ public class BoxJSServlet extends GenericServlet {
     }
 
     public Object evaluateJavascriptFile(Context ctx, Scriptable scope, String path) throws FileNotFoundException, IOException {
-        String filename = this.getServletConfig().getServletContext().getRealPath("/boxjs" + path);
+        String filename = this.getServletConfig().getServletContext().getRealPath("/boxjs/" + path.replace("\\^/", ""));
         String srcName = filename.replaceAll(".*?\\\\(\\w+\\.\\w+)", " $1");
         FileReader rd = null;
         Object r = null;
@@ -187,11 +197,12 @@ public class BoxJSServlet extends GenericServlet {
         ScriptableObject.putProperty(rootScope, "log", Context.javaToJS(log, rootScope));
 
         try {
+            log.info("loading platform.js ...");
+            evaluateJavascriptFile(ctx, rootScope, "/platform.js");
+
             log.info("loading config.js ...");
             evaluateJavascriptFile(ctx, rootScope, "/config.js");
 
-            log.info("loading platform.js ...");
-            evaluateJavascriptFile(ctx, rootScope, "/platform.js");
             service = (Function) rootScope.get("service", rootScope);
 
             config = (Map) rootScope.get("config", rootScope);
@@ -213,12 +224,13 @@ public class BoxJSServlet extends GenericServlet {
 
             loadLibs(config, ctx);
             */
-            
+            /*
             log.info("loading application.js ...");
             String appPath = (String) (config).get("entryPoint");
             appPath = (appPath == null || appPath.isEmpty()) ? "/application.js" : appPath;
             evaluateJavascriptFile(ctx, rootScope, appPath);
             log.info(appPath + ".js files loaded.");
+            */
 
         } catch (Exception e) {
             OutputStream out = new ByteArrayOutputStream();

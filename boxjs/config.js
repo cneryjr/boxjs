@@ -1,10 +1,10 @@
 var config = {
-	applicationRoot: "/",
-	entryPoint: "/application.js",
 	developerMode: true,
 	modules: ["database", "io", "binary"],
 	
 	database: {
-	    datasource: "jdbc/TestDB"
+	    /* datasource: "jdbc/TestDB" */
+    	datasource: "java:/comp/env/jdbc/TestDB"
 	},
+	debugMode: false
 };
