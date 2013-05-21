@@ -65,21 +65,21 @@ var Router = {
 		
 		if ( nurl.match(/.*?\.js$/g) != null) {
 			load(nurl);			
-		} if ( nurl.match(regex) != null) {
+		} else if ( nurl.match(regex) != null) {
 			/*var moduleMethod = regex.exec(url)[0].replace(/^\//,"").split("/");*/
 			var moduleMethod = nurl.split("/");
 			/*var moduleName = moduleMethod[moduleMethod.length-2];*/
 			var methodName = moduleMethod[moduleMethod.length-1];
 
-			print("\n--- Router --------------------------");
-			var mm = [].concat(moduleMethod);
+			/*print("\n--- Router --------------------------");*/
+			/*var mm = [].concat(moduleMethod);
 			print("moduleMethod(antes): [" + nurl + "] => " + JSON.stringify(mm));
 			mm.splice(mm.length-1,1);
 			print("moduleMethod(depois): " + JSON.stringify(mm));
 			print("nurl: " + nurl);
 			print("moduleName: " + mm[mm.length-1]); //moduleName);
 			print("methodName: " + methodName);
-			print("module: " + JSON.stringify(module));
+			print("module: " + JSON.stringify(module)); */
 			
 			moduleMethod.splice(moduleMethod.length-1,1);
 			var module = require(moduleMethod.join("/") + ".js");
@@ -103,7 +103,7 @@ var scripts = {};
  * @returns {Object}
  */
 function require(filename) {
-	print("-- require ---------------------------\n" +  filename);	
+	//print("-- require ---------------------------\n" +  filename);	
 	org.mozilla.javascript.ScriptableObject.putProperty(scope, "exports", {});
 	return servlet.require(filename);
 	/*var exports = servlet.require(filename);
@@ -197,8 +197,7 @@ function service(request, response) {
 				response: response
 			},
 			session : request.getSession(),
-			contextPath : new String(request.getServletContext()
-					.getContextPath()),
+			contextPath : new String(request.getServletContext().getContextPath()),
 			scope : scope,
 			jscontext : jscontext,
 			request : request,
@@ -423,6 +422,9 @@ var http = {
 
 
 var utils = {
+		getRealPath: function(filePath) {
+			return global.request.getServletContext().getRealPath(filePath);
+		},
 		generateReport: function(type, path, parameters) {       
 	        var maps = new java.util.ArrayList(); 
 	        for(var x =0; x < parameters.length; x++) {
