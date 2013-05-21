@@ -65,14 +65,14 @@ var Router = {
 		
 		if ( nurl.match(/.*?\.js$/g) != null) {
 			load(nurl);			
-		} else if ( nurl.match(regex) != null) {
+		} else if ( nurl != "/boxjs" && nurl.match(regex) != null) {
 			/*var moduleMethod = regex.exec(url)[0].replace(/^\//,"").split("/");*/
 			var moduleMethod = nurl.split("/");
 			/*var moduleName = moduleMethod[moduleMethod.length-2];*/
 			var methodName = moduleMethod[moduleMethod.length-1];
 
-			/*print("\n--- Router --------------------------");*/
-			/*var mm = [].concat(moduleMethod);
+			/*print("\n--- Router --------------------------");
+			var mm = [].concat(moduleMethod);
 			print("moduleMethod(antes): [" + nurl + "] => " + JSON.stringify(mm));
 			mm.splice(mm.length-1,1);
 			print("moduleMethod(depois): " + JSON.stringify(mm));
