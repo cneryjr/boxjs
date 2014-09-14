@@ -16,15 +16,16 @@ It allows code written in JavaScript to be interpreted by the Web server, the sa
 ## Tutorial
 
 
+#### 1st Step
+It's create a simple web application in NetBeans using Tomcat servlet container 7.x or 8.x. Follow [this](https://netbeans.org/kb/docs/web/quickstart-webapps.html) tutorial.
+
+
 ### <div style="color: #FF0000">Is outdated and will be fixed in the coming days.<br/></div>
 
-#### 1st Step
-It's create a Dynamic Web Project in eclipse. Follow [this](http://besthowtodo.com/blog/2010/05/how-to-create-dynamic-web-project-in-eclipse.html) tutorial.
-
 #### 2nd Step 
-Copy directory 'boxjs' into the directory /WEB-INF and copy the files boxjs.jar and js.jar  to /WEB-INF/lib, as shown in the figure below.
+Copy directory 'boxjs' into the folder "/Web Pages" and copy the files boxjs.jar, servlet-api.3.0.jar and tomcat-jdbc.jar to /WEB-INF/lib, as shown in the figure below.
 
-![Softbox F01](https://raw.github.com/cneryjr/boxjs/master/docs/images/tutorial_fig01.png)
+![Softbox F01](https://raw.github.com/cneryjr/boxjs/master/docs/images/helloWorld01.png)
 
 
 #### 3rd Step
