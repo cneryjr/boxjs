@@ -1,4 +1,4 @@
-boxJS v.0.3.0
+boxJS v.0.4.0
 ============
 
 boxJS is a container for the application / interpretation JavaScript from the Web server, or is a Server-side JavaScript or (SSJS).
@@ -6,6 +6,7 @@ It allows code written in JavaScript to be interpreted by the Web server, the sa
 
 ## What's new?
 
+* v.0.4.0 - The interpretation Javascript engine was swapped from Rhino to Nashorn (Java 8)
 * v.0.3.0 - Routing module released.
 * v.0.2.9 - Security module released.
 * v.0.2.8 - Database module improvemented.
@@ -13,6 +14,9 @@ It allows code written in JavaScript to be interpreted by the Web server, the sa
 
 
 ## Tutorial
+
+
+### <div style="color: #FF0000">Is outdated and will be fixed in the coming days.<br/></div>
 
 #### 1st Step
 It's create a Dynamic Web Project in eclipse. Follow [this](http://besthowtodo.com/blog/2010/05/how-to-create-dynamic-web-project-in-eclipse.html) tutorial.
@@ -38,7 +42,7 @@ Configure web.xml file with following configuration:
         <servlet-name>BoxJSServlet</servlet-name>
         <servlet-class>sbx.boxjs.BoxJSServlet</servlet-class>
         
-	  <init-param>
+      <init-param>
 	    <param-name>configFile</param-name> 
 	    <param-value>config.js</param-value> 
 	  </init-param>
