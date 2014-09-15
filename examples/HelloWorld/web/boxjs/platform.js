@@ -55,50 +55,6 @@ var Router = {
 		this.deleteRoutes[virtualPath] = realPath;
 		return this;
 	},
-                
-//	process: function(method, url, paramsObject, request, response) {
-//		var regex = new RegExp("/(?:.(?!/.*/))+$", "g");
-//		var nurl = url;
-//		
-//		for (var route in this[method.toLowerCase() + "Routes"]) {
-//			var r = route.replace(/^\//, "");
-//			if (url.indexOf(r) == 0) {
-//				nurl = this[method.toLowerCase() + "Routes"][route];
-//				nurl = url.replace(new RegExp("\^"+r), nurl);
-//				break;
-//			}
-//		}
-//		
-//		if ( nurl.match(/.*?\.js$/g) != null) {
-//			load(nurl);			
-//		} else if ( nurl != "/boxjs" && nurl.match(regex) != null) {
-//			/*var moduleMethod = regex.exec(url)[0].replace(/^\//,"").split("/");*/
-//			var moduleMethod = nurl.split("/");
-//			/*var moduleName = moduleMethod[moduleMethod.length-2];*/
-//			var methodName = moduleMethod[moduleMethod.length-1];
-///*
-//			print("\n--- Router --------------------------");
-//			var mm = [].concat(moduleMethod);
-//			print("moduleMethod(antes): [" + nurl + "] => " + JSON.stringify(mm));
-//			mm.splice(mm.length-1,1);
-//			print("moduleMethod(depois): " + JSON.stringify(mm));
-//			print("nurl: " + nurl);
-//			print("moduleName: " + mm[mm.length-1]);
-//			print("methodName: " + methodName);
-//*/
-//			moduleMethod.splice(moduleMethod.length-1,1);
-//			var module = require(moduleMethod.join("/") + ".js");
-//			
-//			print("\n--------------------module: " + moduleMethod.join("/") + ".js"); 
-//			print("methodName: " + methodName);
-//			print("module: " + JSON.stringify(module));
-//
-//			module[methodName](paramsObject, request, response);
-//		} else {
-//			response.setContentType("text/html");
-//			response.write("<H1>boxJS is running!</H1>");
-//		}		
-//	}
 
 	process: function(method, url, paramsObject, request, response) {
             var regex = new RegExp("/(?:.(?!/.*/))+$", "g");
@@ -118,18 +74,18 @@ var Router = {
                 module[methodName](paramsObject, request, response);
             }
 
-            if ( nurl == "/boxjs" ) {   print("1.DEBUG...");
+            if ( nurl == "/boxjs" ) {   //print("1.DEBUG...");
                 displayBoxJSRunning();
             } else if ( nurl.match(/.*?\.js$/g) != null ) {   //print("4.DEBUG");
                     loadjs(nurl);			
-            } else {    print("1a.DEBUG");
+            } else {    //print("1a.DEBUG");
                 for (var route in this[method.toLowerCase() + "Routes"]) {
                     var r = route.replace(/^\//, "");
                     /* "users/123".match( ":coll/:id".replace(/:(\w+)/g, "(\\w+)").replace("/", "\\/") ); */   
                     var placeholderRoute = url.match( r.replace(/:(\w+)/g, "(\\w+)").replace("/", "\\/") );
                     var regexRoute = url.match(r);
 
-                    if ( regexRoute ) {   print("2.DEBUG");
+                    if ( regexRoute ) {   //print("2.DEBUG");
                         var novaRota = this[method.toLowerCase() + "Routes"][route];
                         
                         if (regexRoute.length > 1) {
@@ -172,7 +128,7 @@ var Router = {
                         return;
                     }
                 }
-                if ( nurl.match(regex) != null ) {   print("5.DEBUG => " + nurl);
+                if ( nurl.match(regex) != null ) {   //print("5.DEBUG => " + nurl);
                     runMethodOnModule(nurl);
                     return;
                 }
@@ -194,7 +150,8 @@ var scripts = {};
  * @returns {Object}
  */
 function require(filename) {
-    var fname = servlet.getServletConfig().getServletContext().getRealPath("/" + filename.replace(/^\//g, ""));
+    //var fname = servlet.getServletConfig().getServletContext().getRealPath("/" + filename.replace(/^\//g, ""));
+    var fname = servlet.getServletConfig().getServletContext().getRealPath("/boxjs/" + filename.replace(/^\//g, ""));
 
     this.exports = {};
     load(fname);

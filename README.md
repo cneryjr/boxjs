@@ -20,8 +20,6 @@ It allows code written in JavaScript to be interpreted by the Web server, the sa
 It's create a simple web application in NetBeans using Tomcat servlet container 7.x or 8.x. Follow [this](https://netbeans.org/kb/docs/web/quickstart-webapps.html) tutorial.
 
 
-### <div style="color: #FF0000">Is outdated and will be fixed in the coming days.<br/></div>
-
 #### 2nd Step 
 Copy directory 'boxjs' into the folder "/Web Pages" and copy the files boxjs.jar, servlet-api.3.0.jar and tomcat-jdbc.jar to /WEB-INF/lib, as shown in the figure below.
 
@@ -29,41 +27,27 @@ Copy directory 'boxjs' into the folder "/Web Pages" and copy the files boxjs.jar
 
 
 #### 3rd Step
-Configure web.xml file with following configuration:
 
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-      version="3.0">
+Create a file named 'hello.js' within the boxjs ("/HelloWorld/web/boxjs") directory, copy and paste the code below:
 
-  <!-- Processador Javascript -->
-    <servlet>
-        <servlet-name>BoxJSServlet</servlet-name>
-        <servlet-class>sbx.boxjs.BoxJSServlet</servlet-class>
-        
-      <init-param>
-	    <param-name>configFile</param-name> 
-	    <param-value>config.js</param-value> 
-	  </init-param>
+``` javascript
 
-		<load-on-startup>1</load-on-startup>
-    </servlet>
- 
-    <servlet-mapping>
-        <servlet-name>BoxJSServlet</servlet-name>
-        <url-pattern>/boxjs/*</url-pattern>
-    </servlet-mapping>
-	<!-- ...................... -->
+print("Hello World!");
 
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-</web-app>
+console.log("Running hello.js...");
+
+http.response.write("<html> <head><title>hello.js</title></head> " 
+    + "<body> <h1> Hello at " + new Date() + " from " + http.request.requestURI
+    + " </h1> <hr>" + "" + "<br>" + "<hr> </body> </html>");
+    
+print("-- hello.js [finished] --------------------------------------------");
+    
 ```
 
+### <div style="color: #FF0000">Is outdated and will be fixed in the coming days.<br/></div>
+
 #### 4th Step
+
 Select the project 'tutorial' tab 'Project Explorer' and press the "Alt + Enter".
 Select the "Java Build Path" in the left pane and then select the tab "Order and Export".
 Select the combobox related to "Web App Libraries" and click "OK".
@@ -83,7 +67,7 @@ Have fun!
 
 <table class="">
 <colgroup>
-	<col class="col-property">
+    <col class="col-property">
 	<col class="col-type">
 	<col class="col-description">
 </colgroup>
