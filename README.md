@@ -1,8 +1,8 @@
 boxJS v.0.4.0
 ============
 
-boxJS is a container for the application / interpretation JavaScript from the Web server, or is a Server-side JavaScript or (SSJS).
-It allows code written in JavaScript to be interpreted by the Web server, the same way as with PHP, for example.
+boxJS is a container for the application / interpretation JavaScript from the Web server, or is a Server-side JavaScript or (SSJS). It allows code written in JavaScript to be interpreted by the Web server, the same way as with PHP, for example.
+boxJS it's run in Nashorn (Java 8 Javascript engine) and allow to debug Javascript source code in server side.
 
 ## What's new?
 
