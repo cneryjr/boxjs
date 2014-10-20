@@ -13,6 +13,10 @@ exports = {
     
     bye: function() {
         http.response.write("<html><body> <h1>Bye boxJS!</h1> </body></html>");
+    },
+    
+    json: function() {
+        http.response.write('{"nome": "David", "idade": 7}');
     }
 };
 

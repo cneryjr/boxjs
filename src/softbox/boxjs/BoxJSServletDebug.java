@@ -23,9 +23,8 @@ public class BoxJSServletDebug extends BoxJSServlet {
     @Override
     ScriptObjectMirror processRequest(ScriptObjectMirror paramsObject, Bindings req, ScriptObjectMirror res) throws IOException, ScriptException, NoSuchMethodException {
 
-        //ScriptObjectMirror resp = (ScriptObjectMirror)internal.callMember("procRequest", paramsObject, req, res);        
-        ScriptObjectMirror resp = Debug.debug(internal, "procRequest", paramsObject, req, res);        
-
+        ScriptObjectMirror resp = (ScriptObjectMirror)internal.callMember("procRequest", paramsObject, req, res);        
+    
         return resp;
     }
     
