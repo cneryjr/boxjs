@@ -169,15 +169,12 @@ var MCollection = {
      * @see #findAndRemove
      */    
     remove: function(query) {
-        query = query ? (new BasicDBObject()).putAll(query) : new BasicDBObject();
-        return this.collection.remove(query);
+        var qry = new BasicDBObject();
         
-//        if (query) {
-//            query = (new BasicDBObject()).putAll(query);
-//            return this.collection.remove(query);
-//        } else {
-//            return this.collection.remove(query);
-//        }
+        if (query)
+            qry = BSON.to(query);
+
+        return this.collection.remove(qry);
     },
     
     /**
@@ -308,10 +305,12 @@ var MCursor = {
      * @returns {Array}
      */
     toArray: function(max) {
-        if (max !== null)
-            return new Array(this.cursor.toArray(max));
+        //print("MCursos.toArray => " + this.cursor.toArray());
+        
+        if (max == undefined)
+            return this.cursor.toArray();
         else
-            return new Array(this.cursor.toArray());
+            return this.cursor.toArray(max);
     },
     
     /**

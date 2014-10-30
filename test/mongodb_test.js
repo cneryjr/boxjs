@@ -226,10 +226,33 @@ describe("Módulo MongoDB ", function () {
             expect(list5.length).toBe(5);
         });
 
-        it("listar os nomes de das empresas de uma determinada localidade ", function () {
+       it("listar os nomes de das empresas de uma determinada localidade ", function () {
             expect(emps.distinct('nome',{sede: "Uberlandia"}).length).toBe(2);
         });
-
+ 
+       it("listar os nomes de das empresas de uma determinada localidade ", function () {
+            emps.insert([
+                { "_id": "1001", "nome": "Empresa 1001", "razaoSocial": "Mil e um Ltda", "codigo": 1001, "sede": "Araguari"},
+                { "_id": "1002", "nome": "Empresa 1002", "razaoSocial": "Mil e dois Ltda", "codigo": 1002, "sede": "Araguari"},
+                { "_id": "1003", "nome": "Empresa 1003", "razaoSocial": "Mil e tres Ltda", "codigo": 1003, "sede": "Araguari"},
+                { "_id": "1004", "nome": "Empresa 1004", "razaoSocial": "Mil e quatro Ltda", "codigo": 1004, "sede": "Araguari"},
+                { "_id": "1005", "nome": "Empresa 1005", "razaoSocial": "Mil e cinco Ltda", "codigo": 1005, "sede": "Araguari"},
+                { "_id": "1006", "nome": "Empresa 1006", "razaoSocial": "Mil e seis Ltda", "codigo": 1006, "sede": "Araguari"},
+                { "_id": "1007", "nome": "Empresa 1007", "razaoSocial": "Mil e sete Ltda", "codigo": 1007, "sede": "Araguari"},
+                { "_id": "1008", "nome": "Empresa 1008", "razaoSocial": "Mil e oito Ltda", "codigo": 1008, "sede": "Araguari"},
+                { "_id": "1009", "nome": "Empresa 1009", "razaoSocial": "Mil e nove Ltda", "codigo": 1009, "sede": "Araguari"},
+                { "_id": "1010", "nome": "Empresa 1010", "razaoSocial": "Mil e dez Ltda", "codigo": 1010, "sede": "Araguari"}
+            ]);
+            //print( "toArray: " + emps.find({sede: "Araguari"}).limit(8).toArray() );
+            //print( "Length: " + emps.find({sede: "Araguari"}).limit(8).toArray().length );
+            
+            expect(emps.count()).toBe(15);
+            expect(emps.find({sede: "Araguari"}).count()).toBe(10);
+            expect(emps.find({sede: "Araguari"}).limit(8).toArray().length).toBe(8);
+            
+            emps.remove({sede: "Araguari"});
+            expect(emps.count()).toBe(5);
+        });
 
     });
     
