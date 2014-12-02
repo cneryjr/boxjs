@@ -17,6 +17,23 @@ exports = {
     
     json: function() {
         http.response.write('{"nome": "David", "idade": 7}');
+    },
+    
+    red: function() {
+        
+    var uri = "https://www.hostedredmine.com";
+    var apiAccessKey = "7e9f0a2eda8b0fd2aa509491f782021c96cba288";
+    var projectKey = "erp-softbox";
+    var queryId = null; // any
+
+
+        var mgr = com.taskadapter.redmineapi.RedmineManagerFactory.createWithApiKey(uri, apiAccessKey);
+        var issueManager = mgr.getIssueManager();
+        var issues = issueManager.getIssues(projectKey, queryId);
+        for (var issue in issues) {
+            System.out.println(issue.toString());
+        }        
+        
     }
 };
 
