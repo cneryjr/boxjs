@@ -1,19 +1,12 @@
 var config = {
-	developerMode: true,
-        
-	modules: [/*"database", "mongodb",*/ "io", "binary", "jsrender"],
+	modules: ["database", "mongodb", "io", "binary", "jsrender"],
 	
-    mongodb: {
-        datasource: "java:comp/env/mongo/MongoDSFactory"
-        },
+	mongodb: {
+		datasource: "java:comp/env/mongo/MongoDSFactory"
+	},
+	
 	database: {
-	    /* datasource: "jdbc/TestDB" */
-		datasource: "java:/comp/env/jdbc/TestDB"
+		/* datasource: "jdbc/TestDB" */
+		datasource: "java:/comp/env/jdbc/TestDBx"
 	}
-};
-
-var console = {
-    log: function(msg) {
-            print(msg);
-    }
 };
