@@ -9,6 +9,8 @@ informal pre V1.0 commit counter: 60 */
  * Released under the MIT License.
  */
 
+var global = {};
+
 var jQuery = jQuery || undefined;
 
 //(function(global, jQuery, undefined) {

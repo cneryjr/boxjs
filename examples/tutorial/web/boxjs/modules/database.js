@@ -60,34 +60,49 @@ db.Database = {
 			 * <i>true<i> ou <i>false<i> de acordo com o resultado da execu&ccedil;&atilde;o do comando SQL.
 			 */
 			execute: function(args) {
-				args = args || [];
-				for(var i=0; i < args.length; i++) {					
-					if(args[i] == null) {
-						this.stmt.setObject(i+1,args[i]);
-					} else if (args[i].constructor.name == "Date") {
-						this.stmt.setTimestamp(i+1, new java.sql.Timestamp(args[i].getTime()));
-					} else {
-					    this.stmt.setObject(i+1,args[i]);
-					};
-				}
-				var rows = new Array();
-				sql = sql.trim();
+                            args = args || [];
+                            for(var i=0; i < args.length; i++) {					
+                                    if(args[i] == null) {
+                                            this.stmt.setObject(i+1,args[i]);
+                                    } else if (args[i].constructor.name == "Date") {
+                                            this.stmt.setTimestamp(i+1, new java.sql.Timestamp(args[i].getTime()));
+                                    } else {
+                                        this.stmt.setObject(i+1,args[i]);
+                                    };
+                            }
+                            var rows = [];
+                            sql = sql.trim();
+                            
 			    if (sql.toUpperCase().indexOf("SELECT") == 0) {
 			    	var rs = this.stmt.executeQuery();
 			        var rsmd = rs.getMetaData();
 			        var numColumns = rsmd.getColumnCount();
-			        var columns = new Array();
-			        rows = new Array();
+			        var columns = [];
+                                /* var types = []; */
+			        rows = [];
 
-		            for (var cl = 1; cl < numColumns + 1; cl++)
+		            for (var cl = 1; cl < numColumns + 1; cl++) {
 		            	columns[cl] = rsmd.getColumnLabel(cl);
+                                /* types[cl] = rsmd.getColumnType(cl); */
+                            }
 			        
 			        while (rs.next()) {
 			            var row = {};
 			
 			            for (var i = 1; i < numColumns + 1; i++) {
 			                var value = rs.getObject(i);
-			                row[columns[i]] = (rs.wasNull()) ? null : new String(value.toString());
+			                row[columns[i]] = (rs.wasNull()) ? null : value;
+                                        /*
+                                        if ([-5,-2,3,8,6,4,2,7].indexOf(types[i]) >= 0) {
+                                            row[columns[i]] = (rs.wasNull()) ? null : new Number(value);
+                                            print("Number: " + row[columns[i]]);
+                                        } else if ([1,-16,-4,-1,-15,-3,12].indexOf(types[i]) >= 0) {
+                                            row[columns[i]] = (rs.wasNull()) ? null : value.toString();
+                                            print("String: " + row[columns[i]]);
+                                        } else {
+                                            row[columns[i]] = (rs.wasNull()) ? null : value;
+                                        }
+                                        */
 			            } //end for
 			
 			            rows.push(row);
@@ -142,7 +157,7 @@ db.Database = {
 						};
 					}
 					var rsk = this.stmt.executeBatch();
-					var rows = new Array();
+					var rows = [];
 					for(var key in rsk) {
 						if(rsk[key] >= 0) {
 							rows.push({error: false, affectedRows: rsk[key]});
