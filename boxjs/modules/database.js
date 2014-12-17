@@ -78,12 +78,12 @@ db.Database = {
 			        var rsmd = rs.getMetaData();
 			        var numColumns = rsmd.getColumnCount();
 			        var columns = [];
-                                /* var types = []; */
+                                var types = [];
 			        rows = [];
 
 		            for (var cl = 1; cl < numColumns + 1; cl++) {
 		            	columns[cl] = rsmd.getColumnLabel(cl);
-                                /* types[cl] = rsmd.getColumnType(cl); */
+                                types[cl] = rsmd.getColumnType(cl);
                             }
 			        
 			        while (rs.next()) {
@@ -91,7 +91,15 @@ db.Database = {
 			
 			            for (var i = 1; i < numColumns + 1; i++) {
 			                var value = rs.getObject(i);
-			                row[columns[i]] = (rs.wasNull()) ? null : value;
+			                // row[columns[i]] = (rs.wasNull()) ? null : value;
+                                        if (rs.wasNull()) {
+                                            row[columns[i]] = null;
+                                        } else if ([91,92,93].indexOf(types[i])) {
+                                            row[columns[i]] = value.toString();
+                                        } else {
+                                            row[columns[i]] = value;
+                                        }
+                                        
                                         /*
                                         if ([-5,-2,3,8,6,4,2,7].indexOf(types[i]) >= 0) {
                                             row[columns[i]] = (rs.wasNull()) ? null : new Number(value);
