@@ -2,7 +2,7 @@ INTRODUÇÃO - boxjs v.0.4.0
 _________________________
 
 boxjs é um servidor de aplicação Javascript baseado em Nashorn (Script Engine do Java 8), conhecido também por Server-side JavaScript or (SSJS).
-Tem como premissa performance, robustez, segurança e desenvolvimento rápido para aplicações Web.
+Tem como premissas performance, robustez, segurança e desenvolvimento rápido para aplicações Web.
 
 Algumas 'features' interessantes:
 
