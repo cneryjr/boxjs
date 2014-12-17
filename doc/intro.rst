@@ -1,4 +1,4 @@
-INTODUÇÃO - boxjs v.0.4.0
+INTRODUÇÃO - boxjs v.0.4.0
 _________________________
 
 boxjs é um servidor de aplicação Javascript baseado em Nashorn (Script Engine do Java 8), conhecido também porServer-side JavaScript or (SSJS).
