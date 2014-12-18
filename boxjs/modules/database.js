@@ -94,7 +94,7 @@ db.Database = {
 			                // row[columns[i]] = (rs.wasNull()) ? null : value;
                                         if (rs.wasNull()) {
                                             row[columns[i]] = null;
-                                        } else if ([91,92,93].indexOf(types[i])) {
+                                        } else if ([91,92,93].indexOf(types[i]) >= 0) {
                                             row[columns[i]] = value.toString();
                                         } else {
                                             row[columns[i]] = value;
