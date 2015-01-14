@@ -2,6 +2,22 @@ var BasicDBObject = Java.type('com.mongodb.BasicDBObject');
 var HashMap = Java.type('java.util.HashMap');
 var WriteConcern = Java.type('com.mongodb.WriteConcern');
 
+
+Array.prototype.toString = function() {
+    var json = [];
+
+    this.forEach(function(xx){
+        if (xx.getClass != undefined &&  ["com.mongoDB.BasicDBOject", "com.mongoDB.BasicDBList"].indexOf(xx.getClass().getName()) >= 0) {
+            json.con(xx.toString());
+        } else {
+            json.push(JSON.stringify(xx));
+        }
+    });
+
+    return "[" + json.join(", ") + "]";
+};
+
+
 var BSON = {
     to: function(object) {
         
@@ -40,6 +56,10 @@ var BSON = {
                 return object;
             }
         }
+    },
+
+    from: function(object) {
+        return JSON.parse(object.toString());
     }
 };
 
@@ -212,13 +232,14 @@ var MCollection = {
      * @returns See {MongoCursor}
      */    
     aggregate: function(pipeline, options) {
-        var jopr, jpip = new java.util.ArrayList();
+        var jpip = new java.util.ArrayList();
         
         pipeline.forEach(function(opr){
-            (jopr = new BasicDBObject()).putAll(opr);
-            jpip.add(jopr);
+            var jopr = BSON.to(opr);
+            jpip.add(jopr);            
         });
-        options = options ? (new BasicDBObject()).putAll(options) : null;
+
+        options = options ? BSON.to(options) : null;
                 
         return this.collection.aggregate(jpip, options);
     },
@@ -331,14 +352,42 @@ var MCursor = {
      */
     next: function() {
         return this.cursor.next();
+        //return BSON.from(this.cursor.next());
     },
     /**
      * kills the current cursor on the server.
      */
     close: function() {
         this.cursor.close();
-    }
+    },
     
+    map: function(callback, thisArg) {
+
+        var T, A, k;
+        var O = Object(this);
+
+        if (typeof callback !== 'function') {
+          throw new TypeError(callback + ' is not a function');
+        }
+
+        if (arguments.length > 1) {
+          T = thisArg;
+        }
+
+        A = new Array();
+
+        k = 0;
+        while (this.cursor.hasNext()) {
+            var kValue, mappedValue;
+            // kValue = BSON.from(this.cursor.next());
+            kValue = this.cursor.next();
+            mappedValue = callback.call(T, kValue, k, O);
+            A.push(mappedValue);
+            k++;
+        }
+        
+        return A;
+      }
 };
 
 /**
