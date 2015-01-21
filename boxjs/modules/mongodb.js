@@ -1,22 +1,6 @@
 var BasicDBObject = Java.type('com.mongodb.BasicDBObject');
-var HashMap = Java.type('java.util.HashMap');
-var WriteConcern = Java.type('com.mongodb.WriteConcern');
-
-
-Array.prototype.toString = function() {
-    var json = [];
-
-    this.forEach(function(xx){
-        if (xx.getClass != undefined &&  ["com.mongoDB.BasicDBOject", "com.mongoDB.BasicDBList"].indexOf(xx.getClass().getName()) >= 0) {
-            json.con(xx.toString());
-        } else {
-            json.push(JSON.stringify(xx));
-        }
-    });
-
-    return "[" + json.join(", ") + "]";
-};
-
+var HashMap       = Java.type('java.util.HashMap');
+var WriteConcern  = Java.type('com.mongodb.WriteConcern');
 
 var BSON = {
     to: function(object) {
@@ -76,13 +60,11 @@ db.MongoDB = {
     WriteConcern: WriteConcern,    
 
     getClient: function() {
-        //this.client = new com.mongodb.MongoClient( "localhost" , 27017 );
         return this.client;
     },
 
     getDB: function(dbName) {
         var MongoDatabase = function() {
-            //print("mongodb ==>> " + mongodb)
             this.db = db.MongoDB.client.getDB(dbName);
         };
         MongoDatabase.prototype = MDatabase;
@@ -94,13 +76,12 @@ db.MongoDB = {
     }
     
 };
-//db.MongoDB.setWriteConcern(WriteConcern.JOURNALED);
 
 var MDatabase = {
     getCollection: function(collectionName) {
         var db = this.db;
         var MongoCollection = function() {
-            this.collection = db.getCollection(collectionName);
+            this.collection = db.getCollection(collectionName);	
         };
         MongoCollection.prototype = MCollection;
         return new MongoCollection();
@@ -108,7 +89,13 @@ var MDatabase = {
         
     getName: function() {
         return this.db.getName();
-    }
+    },
+    
+    eval : function(command) {
+    	
+    	return this.db.eval(command); 
+    	
+    } 	
 };
 
 
@@ -144,11 +131,13 @@ var MCollection = {
         var qry = new BasicDBObject();
         var keys = new BasicDBObject();
         
-        if (query)
+        if (query) 
             qry = BSON.to(query);
         if (fields)
             keys.putAll(fields);
 
+        
+        
         var cursor = this.collection.find(qry, keys);
 
         return new MongoCursor(cursor);
@@ -262,10 +251,69 @@ var MCursor = {
      * @param {type} fnc A JavaScript function to apply to each document from 
      *         the cursor. The <function> signature includes a single argument 
      *         that is passed the current document to process.
+     * @param {object} thisArg Optional. Value to use as this when executing callback.
      */
-    forEach: function(fnc) {
-        this.cursor.forEach(fnc);
+    forEach : function(callback, thisArg) { 
+    	
+    	    var T, k;
+
+    	    if ( this == null ) {
+    	      throw new TypeError( "this is null or not defined" );
+    	    }
+
+    	    var O = Object(this);
+
+    	    if ( {}.toString.call(callback) !== "[object Function]" ) {
+    	      throw new TypeError( callback + " is not a function" );
+    	    }
+
+    	    if ( thisArg ) {
+    	      T = thisArg;
+    	    }
+    	    
+    	    k = 0;
+
+    	    while(this.cursor.hasNext()) {
+    	      var kValue = this.next();
+    	      callback.call( T, kValue, k, O );
+    	      k++;
+    	    }
     },
+    
+    /**
+     * Iterates the cursor to apply a JavaScript function to each document from the cursor and return this value.
+     * 
+     * @param {function} fnc A JavaScript function to apply to each document from 
+     *         the cursor. The <function> signature includes a single argument 
+     *         that is passed the current document to process.
+     * @param {object} thisArg Optional. Value to use as this when executing callback.
+     */
+    map: function(callback, thisArg) {
+        var T, A, k;
+        var O = Object(this);
+
+        if (typeof callback !== 'function') {
+          throw new TypeError(callback + ' is not a function');
+        }
+
+        if (arguments.length > 1) {
+          T = thisArg;
+        }
+
+        A = new Array();
+
+        k = 0;
+        while (this.cursor.hasNext()) {
+            var kValue, mappedValue;
+            kValue = this.next();
+            mappedValue = callback.call(T, kValue, k, O);
+            A.push(mappedValue);
+            k++;
+        }
+        
+        return A;
+      },
+      
     /**
      * Pulls back all items into an array and returns the number of objects. Note: this can be resource intensive
      * @returns {Number} the number of elements in the array
@@ -326,12 +374,24 @@ var MCursor = {
      * @returns {Array}
      */
     toArray: function(max) {
-        //print("MCursos.toArray => " + this.cursor.toArray());
-        
-        if (max == undefined)
-            return this.cursor.toArray();
-        else
-            return this.cursor.toArray(max);
+    	
+    	if(max && isNaN(max)) {
+    		throw new TypeError(max + ' is not a number');
+    	}
+    	
+    	var k = 0;
+    	var arr = new Array();
+    	
+    	while(this.cursor.hasNext()) {
+    		arr.push(this.next());
+    		
+    		if(max && (max-1 == k)) {
+    			break;
+    		}
+    		k++;
+    	}
+    	
+    	return arr;
     },
     
     /**
@@ -351,8 +411,7 @@ var MCursor = {
      * @see #hasNext
      */
     next: function() {
-        return this.cursor.next();
-        //return BSON.from(this.cursor.next());
+        return BSON.from(this.cursor.next());
     },
     /**
      * kills the current cursor on the server.
@@ -361,33 +420,15 @@ var MCursor = {
         this.cursor.close();
     },
     
-    map: function(callback, thisArg) {
-
-        var T, A, k;
-        var O = Object(this);
-
-        if (typeof callback !== 'function') {
-          throw new TypeError(callback + ' is not a function');
-        }
-
-        if (arguments.length > 1) {
-          T = thisArg;
-        }
-
-        A = new Array();
-
-        k = 0;
-        while (this.cursor.hasNext()) {
-            var kValue, mappedValue;
-            // kValue = BSON.from(this.cursor.next());
-            kValue = this.cursor.next();
-            mappedValue = callback.call(T, kValue, k, O);
-            A.push(mappedValue);
-            k++;
-        }
-        
-        return A;
-      }
+    toStringJSON : function(max) {
+    	
+    	if (max == undefined) {
+    		return this.cursor.toArray().toString();
+    	} else {
+    		return this.cursor.toArray(max).toString();
+    	}
+    	
+    }
 };
 
 /**
