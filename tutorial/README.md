@@ -1,12 +1,12 @@
-# Tutorial Leil„o boxJS
+# Tutorial Leil√£o boxJS
 
-Uma das formas mais comum de nÛs, programadores, aprendermos a programar em uma nova linguagem ou com um novo framework, È usando-o para desenvolver
-alguma aplicaÁ„o, ent„o, para fixar o que foi ensinado sobre o boxJS atÈ o momento, propomos a construÁ„o de uma simples aplicaÁ„o web de leilıes online.
+Uma das formas mais comum de n√≥s, programadores, aprendermos a programar em uma nova linguagem ou com um novo framework, √© usando-o para desenvolver
+alguma aplica√ß√£o, ent√£o, para fixar o que foi ensinado sobre o boxJS at√© o momento, propomos a constru√ß√£o de uma simples aplica√ß√£o web de leil√µes online.
 
 
-## Sum·rio
+## Sum√°rio
 
-* [Antes de comeÁar](#antes-de-come%C3%A7ar)
+* [Antes de come√ßar](#antes-de-come%C3%A7ar)
   * [Bootstrap e AngularJS](#bootstrap-e-angularjs)
   * [Front End](#front-end)
 * [Back End com boxJS](#back-end-com-boxjs)
@@ -22,34 +22,34 @@ alguma aplicaÁ„o, ent„o, para fixar o que foi ensinado sobre o boxJS atÈ o momen
   * [`svr.js`](#svrjs)
   * [`security.js`](#securityjs)
 
-## Antes de comeÁar
+## Antes de come√ßar
 
 ### Bootstrap e AngularJS
 
-… interessante que, antes de comeÁarmos, vocÍ tenha tudo instalado e esteja familiarizado com as outras ferramentas que utilizaremos, s„o elas:
+√â interessante que, antes de come√ßarmos, voc√™ tenha tudo instalado e esteja familiarizado com as outras ferramentas que utilizaremos, s√£o elas:
 
 * [Bootstrap](http://getbootstrap.com/)
 * [AngularJS](https://angularjs.org/)
 
-Apesar dessas ferramentas serem amplamente usadas neste tutorial para desenvolver o front end, acreditamos que seja pÛssivel seguÌ-lo apenas com um 
-conhecimento b·sico delas.
+Apesar dessas ferramentas serem amplamente usadas neste tutorial para desenvolver o front end, acreditamos que seja p√≥ssivel segu√≠-lo apenas com um 
+conhecimento b√°sico delas.
 
 
 ### Front End
 
-Como nosso objetivo È focar no aprendizado do boxJS, a parte front end do nosso leil„o j· est· pronta para download [clicando aqui](https://github.com/cneryjr/boxjs/blob/master/tutorial/leilaoBoxJS.rar), 
-mas vocÍ esta livre caso prefira implement·-la, apenas certifique-se que o front end esteja utilizando corretamente o boxJS (para isso recomendamos que vocÍ faÁa o 
-download e veja como nÛs acessamos o back end).
+Como nosso objetivo √© focar no aprendizado do boxJS, a parte front end do nosso leil√£o j√° est√° pronta para download [clicando aqui](https://github.com/cneryjr/boxjs/blob/master/tutorial/leilaoBoxJS.rar?raw=true), 
+mas voc√™ esta livre caso prefira implement√°-la, apenas certifique-se que o front end esteja utilizando corretamente o boxJS (para isso recomendamos que voc√™ fa√ßa o 
+download e veja como n√≥s acessamos o back end).
 
 
 ## Back End com boxJS
 
-Nosso tutorial comeÁa, de fato, a partir de agora, mas consideramos que vocÍ seguiu e [leu todos os passos atÈ aqui](https://github.com/cneryjr/boxjs/blob/master/README.md) e que j· est· com seu 
-[front end pronto e o boxJS funcionando, com alguns setups b·sicos](#front-end), conforme ensinado nos tutoriais anteriores.
+Nosso tutorial come√ßa, de fato, a partir de agora, mas consideramos que voc√™ seguiu e [leu todos os passos at√© aqui](https://github.com/cneryjr/boxjs/blob/master/README.md) e que j√° est√° com seu 
+[front end pronto e o boxJS funcionando, com alguns setups b√°sicos](#front-end), conforme ensinado nos tutoriais anteriores.
 
 ### `routes.js`
 
-O nosso primeiro passo È arrumar as rotas. Conforme podemos ver no nosso serviÁo de acesso ao banco abaixo, nossa aplicaÁ„o espera acessar as urls `boxjs/leilao/inserir`, `boxjs/leilao/buscar`, 
+O nosso primeiro passo √© arrumar as rotas. Conforme podemos ver no nosso servi√ßo de acesso ao banco abaixo, nossa aplica√ß√£o espera acessar as urls `boxjs/leilao/inserir`, `boxjs/leilao/buscar`, 
 `boxjs/leilao/darlance`, `boxjs/leilao/fechar`, `boxjs/usuario/tela`, `boxjs/usuario/buscar`, `boxjs/usuario/inserir`.
 
 
@@ -89,7 +89,7 @@ leilaoApp.factory("databaseSvc", ['$http','$q', function ($http,$q) {
 ~~~
 
 
-AlÈm disso, o serviÁo de autenticaÁ„o, conforme o cÛdigo abaixo, espera acessar a url `boxjs/svr/login`.
+Al√©m disso, o servi√ßo de autentica√ß√£o, conforme o c√≥digo abaixo, espera acessar a url `boxjs/svr/login`.
 
 
 ~~~ javascript
@@ -145,10 +145,10 @@ leilaoApp.factory("authenticationSvc", ['$http','$q','$window','userInfoFac',fun
 ~~~
 
 
-Uma vez que j· sabemos as URLs que ser„o acessadas, podemos criar as rotas, j· que n„o È considerada uma boa pr·tica deixar os arquivos no diretÛrio inicial do boxJS. Usaremos, ent„o, a 
-pasta `actions` para colocar o que ser· executado pelo boxJS, o primeiro passo È criar os trÍs arquivos, `usuario.js`, `leilao.js`, `svr.js` (sim, esses arquivos permanecem vazios, por enquanto,
-pois os implanteremos mais tarde!), dentro desta pasta. Com isso feito podemos, finalmente, configurar nossas rotas, È importante lembrar que isso È feito dentro do arquivo `routes.js` que se 
-encontra dentro da pasta `modules` e que a adiÁ„o de uma rota segue o padr„o `Router.add( 'nomeDaURL', 'caminho/para/o/arquivo')`, deixando nosso arquivo `routes.js` da seguinte forma:
+Uma vez que j√° sabemos as URLs que ser√£o acessadas, podemos criar as rotas, j√° que n√£o √© considerada uma boa pr√°tica deixar os arquivos no diret√≥rio inicial do boxJS. Usaremos, ent√£o, a 
+pasta `actions` para colocar o que ser√° executado pelo boxJS, o primeiro passo √© criar os tr√™s arquivos, `usuario.js`, `leilao.js`, `svr.js` (sim, esses arquivos permanecem vazios, por enquanto,
+pois os implanteremos mais tarde!), dentro desta pasta. Com isso feito podemos, finalmente, configurar nossas rotas, √© importante lembrar que isso √© feito dentro do arquivo `routes.js` que se 
+encontra dentro da pasta `modules` e que a adi√ß√£o de uma rota segue o padr√£o `Router.add( 'nomeDaURL', 'caminho/para/o/arquivo')`, deixando nosso arquivo `routes.js` da seguinte forma:
 
 ~~~ javascript
 
@@ -163,8 +163,8 @@ Router.add( 'svr', 'actions/svr');
 
 ### `leilao.js` e `usuario.js`
 
-O primeiro passo parar implementar estes dois arquivos È saber quais ser„o os seus mÈtodos, conforme vimos na criaÁ„o do `routes.js`, o front end ir· acessar as URLs: `boxjs/leilao/inserir`, `boxjs/leilao/buscar`, 
-`boxjs/leilao/darlance`, `boxjs/leilao/fechar`, `boxjs/usuario/tela`, `boxjs/usuario/buscar`, `boxjs/usuario/inserir`. Logo, nossos mÈtodos s„o:
+O primeiro passo parar implementar estes dois arquivos √© saber quais ser√£o os seus m√©todos, conforme vimos na cria√ß√£o do `routes.js`, o front end ir√° acessar as URLs: `boxjs/leilao/inserir`, `boxjs/leilao/buscar`, 
+`boxjs/leilao/darlance`, `boxjs/leilao/fechar`, `boxjs/usuario/tela`, `boxjs/usuario/buscar`, `boxjs/usuario/inserir`. Logo, nossos m√©todos s√£o:
 
 * leilao
   * [inserir](#leilaoinserir)
@@ -180,21 +180,21 @@ O primeiro passo parar implementar estes dois arquivos È saber quais ser„o os se
 
 #### leilao/inserir
 
-Objetivo: Inserir um novo leil„o no banco.
+Objetivo: Inserir um novo leil√£o no banco.
 
-Par‚metros: Leil„o a ser inserido.
+Par√¢metros: Leil√£o a ser inserido.
 
-Retorna: Informa se a inserÁ„o falhou ou n„o.
+Retorna: Informa se a inser√ß√£o falhou ou n√£o.
 
-Regras de negÛcio:
+Regras de neg√≥cio:
 
-- Status do novo leil„o deve ser 'aberto'.
+- Status do novo leil√£o deve ser 'aberto'.
 
 - Lista de lances deve estar vazia.
 
 - O ID deve ser incremental.
 
-CÛdigo:
+C√≥digo:
 
 ~~~ javascript
 inserir: function (params,request,response) {
@@ -210,7 +210,7 @@ inserir: function (params,request,response) {
 }
 ~~~
 
-OBS: Para que o ID seja incremental adicionamos a funÁ„o getNextSequence(name) ao banco que usa o comando findAndModify para incrementar o id de forma atÙmica.
+OBS: Para que o ID seja incremental adicionamos a fun√ß√£o getNextSequence(name) ao banco que usa o comando findAndModify para incrementar o id de forma at√¥mica.
 
 ~~~ javascript
 function getNextSequence(name) {
@@ -230,13 +230,13 @@ function getNextSequence(name) {
 
 #### leilao/buscar
 
-Objetivo: Buscar leilıes do banco.
+Objetivo: Buscar leil√µes do banco.
 
-Par‚metros: Query a ser executada e campos a serem retornado.
+Par√¢metros: Query a ser executada e campos a serem retornado.
 
-Retorna: Array de leilıes resultantes da execuÁ„o da query com os campos especificados.
+Retorna: Array de leil√µes resultantes da execu√ß√£o da query com os campos especificados.
 
-CÛdigo:
+C√≥digo:
 
 ~~~ javascript
 buscar: function (params,request,response) {
@@ -251,17 +251,17 @@ buscar: function (params,request,response) {
 
 #### leilao/darlance
 
-Objetivo: Adicionar um lance a um leil„o do banco.
+Objetivo: Adicionar um lance a um leil√£o do banco.
 
-Par‚metros: ID do leil„o que receber· o lance e o lance.
+Par√¢metros: ID do leil√£o que receber√° o lance e o lance.
 
-Retorna: Informa se a adiÁ„o do lance falhou ou n„o.
+Retorna: Informa se a adi√ß√£o do lance falhou ou n√£o.
 
-Regras de negÛcio:
+Regras de neg√≥cio:
 
-- Para um lance ser aceito ele deve ser maior que o mÌnimo e maior que o lance anterior, caso ele exista.
+- Para um lance ser aceito ele deve ser maior que o m√≠nimo e maior que o lance anterior, caso ele exista.
 
-CÛdigo:
+C√≥digo:
 
 ~~~ javascript
 darlance: function (params,request,response) {
@@ -285,22 +285,22 @@ darlance: function (params,request,response) {
 
 #### leilao/fechar
 
-Objetivo: Fechar um leil„o do banco.
+Objetivo: Fechar um leil√£o do banco.
 
-Par‚metros: ID do leil„o a ser fechado.
+Par√¢metros: ID do leil√£o a ser fechado.
 
-Retorna: Leil„o fechado, caso o fechamento ocorra.
+Retorna: Leil√£o fechado, caso o fechamento ocorra.
 
-Regras de negÛcio:
+Regras de neg√≥cio:
 
-- Testar se existe um leil„o com o ID indicado.
+- Testar se existe um leil√£o com o ID indicado.
 
-- Colocar no leil„o os dados do lance vencedor.
+- Colocar no leil√£o os dados do lance vencedor.
 
-- Mudar o status do leil„o para 'fechado'.
+- Mudar o status do leil√£o para 'fechado'.
 
 
-CÛdigo:
+C√≥digo:
 
 ~~~ javascript
 fechar: function (params,request,response) {
@@ -332,7 +332,7 @@ Objetivo: Verificar se a tela de usuario pode ser acessada pelo usuario atual.
 
 Retorna: Libera o acesso para a tela.
 
-CÛdigo:
+C√≥digo:
 
 ~~~ javascript
 tela: function (params,request,response) {
@@ -342,25 +342,25 @@ tela: function (params,request,response) {
 }
 ~~~
 
-OBS: Este mÈtodo far· mais sentido quando o `security.js` for implementado.
+OBS: Este m√©todo far√° mais sentido quando o `security.js` for implementado.
 
 
 
 
 #### usuario/inserir
 
-Objetivo: Inserir um novo usu·rio ao banco.
+Objetivo: Inserir um novo usu√°rio ao banco.
 
-Par‚metros: Usu·rio a ser inserido.
+Par√¢metros: Usu√°rio a ser inserido.
 
-Retorna: Informa se a inserÁ„o do usuario falhou ou n„o.
+Retorna: Informa se a inser√ß√£o do usuario falhou ou n√£o.
 
-Regras de negÛcio:
+Regras de neg√≥cio:
 
-- Setar o tipo do usu·rio para 'basic'.
+- Setar o tipo do usu√°rio para 'basic'.
 
 
-CÛdigo:
+C√≥digo:
 
 ~~~ javascript
 inserir: function (params,request,response) {
@@ -384,13 +384,13 @@ inserir: function (params,request,response) {
 
 #### usuario/buscar
 
-Objetivo: Buscar usu·rios no banco.
+Objetivo: Buscar usu√°rios no banco.
 
-Par‚metros: Query a ser executada e campos a serem retornado.
+Par√¢metros: Query a ser executada e campos a serem retornado.
 
-Retorna: Array de usu·rios resultantes da execuÁ„o da query com os campos especificados.
+Retorna: Array de usu√°rios resultantes da execu√ß√£o da query com os campos especificados.
 
-CÛdigo:
+C√≥digo:
 
 ~~~ javascript
 buscar: function (params,request,response) {
@@ -406,7 +406,7 @@ buscar: function (params,request,response) {
 
 
 
-Agora basta que juntemos todos esses mÈtodos em seus respectivos arquivos, utilizando um objeto exports:
+Agora basta que juntemos todos esses m√©todos em seus respectivos arquivos, utilizando um objeto exports:
 
 
 ~~~ javascript
@@ -506,24 +506,24 @@ exports = {
 
 ~~~
 
-H· uma pequena diferenÁa entre os cÛdigos de cada mÈtodo e o cÛdigo que os unifica. Como o acesso a collection a qual o arquivo È referente ser· feito por praticamente todos os seus mÈtodos
-colocamos esse acesso fora de um mÈtodo especifico.
+H√° uma pequena diferen√ßa entre os c√≥digos de cada m√©todo e o c√≥digo que os unifica. Como o acesso a collection a qual o arquivo √© referente ser√° feito por praticamente todos os seus m√©todos
+colocamos esse acesso fora de um m√©todo especifico.
 
 
 ### `svr.js`
 
-Conforme visto durante a criaÁ„o do `routes.js`, este arquivo conter· apenas um mÈtodo, o login, que ser· usado para conferir a senha e o nome do usu·rio e, caso os dados sejam v·lidos, criar
+Conforme visto durante a cria√ß√£o do `routes.js`, este arquivo conter√° apenas um m√©todo, o login, que ser√° usado para conferir a senha e o nome do usu√°rio e, caso os dados sejam v√°lidos, criar
 um token de acesso para ele.
 
-A primeira parte do nosso mÈtodo, ser·, ent„o, checar se o usu·rio e senha fornecidos s„o v·lidos e isso È feito facilmente, basta checar se h· uma entrada no banco com aquela senha 
-e aquele nome de usu·rio, caso afirmativo, os dados s„o v·lidos e o usu·rio deve receber seu token de acesso.
+A primeira parte do nosso m√©todo, ser√°, ent√£o, checar se o usu√°rio e senha fornecidos s√£o v√°lidos e isso √© feito facilmente, basta checar se h√° uma entrada no banco com aquela senha 
+e aquele nome de usu√°rio, caso afirmativo, os dados s√£o v√°lidos e o usu√°rio deve receber seu token de acesso.
 
-O token de acesso pode ser feito de qualquer maneira, sÛ È importante que ele seja ˙nico para um usu·rio, n„o possa ser gerado por algum usu·rio mal intencionado e seja possÌvel
-que o servidor cheque se um determinado token È de um determinado usu·rio. Para suprir todos estes prÈ-requisitos, nosso token ser· a concatenaÁ„o do nome do usu·rio, tempo m·ximo de duraÁ„o do token
-e o tipo do usu·rio, tudo isso criptografado utilizando o AES e uma chave que È de conhecimento apenas do servidor.
+O token de acesso pode ser feito de qualquer maneira, s√≥ √© importante que ele seja √∫nico para um usu√°rio, n√£o possa ser gerado por algum usu√°rio mal intencionado e seja poss√≠vel
+que o servidor cheque se um determinado token √© de um determinado usu√°rio. Para suprir todos estes pr√©-requisitos, nosso token ser√° a concatena√ß√£o do nome do usu√°rio, tempo m√°ximo de dura√ß√£o do token
+e o tipo do usu√°rio, tudo isso criptografado utilizando o AES e uma chave que √© de conhecimento apenas do servidor.
 
-Para utilizar o AES adicionaremos ‡ pasta `modules` o arquivo [`aes.js`](http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js), e alÈm de acrescentar esse novo mÛdulo ao `config.js`,
-colocaremos nele a chave de criptografia que ser· usada, deixando o nosso `config.js` da seguinte forma:
+Para utilizar o AES adicionaremos √† pasta `modules` o arquivo [`aes.js`](http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js), e al√©m de acrescentar esse novo m√≥dulo ao `config.js`,
+colocaremos nele a chave de criptografia que ser√° usada, deixando o nosso `config.js` da seguinte forma:
 
 ~~~ javascript
 
@@ -551,7 +551,7 @@ exports = {
 	login: function (params,request,response) {
 		var search = colUsuario.find( { "_id": params.user, "senha": params.pass } );
 		if(search.hasNext()) {
-			var newDateObj = (new Date()).getTime() + 30*60000; // token durar· por 30 minutos
+			var newDateObj = (new Date()).getTime() + 30*60000; // token durar√° por 30 minutos
 			var token = params.user + "@" + newDateObj + '@' + search.next().tipo;
 			var tokenToSend = (CryptoJS.AES.encrypt(token,config.serverKey)).toString();
 			response.write(JSON.stringify({error: false, accessToken: tokenToSend, userName: params.user, timestamp: newDateObj }));
@@ -561,7 +561,7 @@ exports = {
 		else {
 			print("-- login failed svr.js [finished] --------------------------------------------");
 			response.setStatus(401);
-			response.write(JSON.stringify({error: true, reason: "Senha e/ou password inv·lido."}));
+			response.write(JSON.stringify({error: true, reason: "Senha e/ou password inv√°lido."}));
 		}
 	}
 }
@@ -571,18 +571,18 @@ exports = {
 
 ### `security.js`
 
-Conforme vimos [anteriormente](https://github.com/cneryjr/boxjs/blob/master/README.md#utilizando-o-securityjs), o mÛdulo de seguranÁa constitui parte importante de uma aplicaÁ„o,
-uma vez que È ele quem restringe os usu·rios a acessarem certas funcionalidades do nosso sistema. E, como no nosso leil„o existem dois tipos de
-usu·rios (administrador, que cria e fecha leilıes, alÈm de fazer o cadastro de usu·rios, e usu·rio padr„o, que apenas da lances), este tipo de
-restriÁ„o È de extrema import‚ncia.
+Conforme vimos [anteriormente](https://github.com/cneryjr/boxjs/blob/master/README.md#utilizando-o-securityjs), o m√≥dulo de seguran√ßa constitui parte importante de uma aplica√ß√£o,
+uma vez que √© ele quem restringe os usu√°rios a acessarem certas funcionalidades do nosso sistema. E, como no nosso leil√£o existem dois tipos de
+usu√°rios (administrador, que cria e fecha leil√µes, al√©m de fazer o cadastro de usu√°rios, e usu√°rio padr√£o, que apenas da lances), este tipo de
+restri√ß√£o √© de extrema import√¢ncia.
 
-Pegando como base os mÈtodos desenvolvidos atÈ o momento e os 3 tipos de acesso (usu·rio administrador, usu·rio padr„o e visitante) com os quais podemos nos deparar, podemos 
-definir como ser· nosso controle de acesso.
+Pegando como base os m√©todos desenvolvidos at√© o momento e os 3 tipos de acesso (usu√°rio administrador, usu√°rio padr√£o e visitante) com os quais podemos nos deparar, podemos 
+definir como ser√° nosso controle de acesso.
 
 
 * Visitante
   * svr/login
-* Padr„o
+* Padr√£o
   * svr/login
   * leilao/darlance
   * leilao/buscar
@@ -598,15 +598,15 @@ definir como ser· nosso controle de acesso.
   * usuario/inserir
 
 
-Encaixando esse modelo nos 4 mÈtodos do security que vÍm por padr„o com o boxJS, temos que:
+Encaixando esse modelo nos 4 m√©todos do security que v√™m por padr√£o com o boxJS, temos que:
 
-- isUserLogged: Deve barrar qualquer acesso que n„o for ao `svr/login`, quando o usu·rio n„o esta logado.
+- isUserLogged: Deve barrar qualquer acesso que n√£o for ao `svr/login`, quando o usu√°rio n√£o esta logado.
 
-- isSessionValid: N„o deve barrar em nenhum caso.
+- isSessionValid: N√£o deve barrar em nenhum caso.
 
-- hasPermissionInThisModule: N„o deve barrar em nenhum caso.
+- hasPermissionInThisModule: N√£o deve barrar em nenhum caso.
 
-- hasPermissionInThisMethod: N„o deve barrar acesso ao `svr/login`. Deve barrar acesso aos mÈtodos `inserir`, `fechar` e `tela`, quando o usu·rio n„o for administrador.
+- hasPermissionInThisMethod: N√£o deve barrar acesso ao `svr/login`. Deve barrar acesso aos m√©todos `inserir`, `fechar` e `tela`, quando o usu√°rio n√£o for administrador.
 
 
 O que deixa nosso `security.js` da seguinte forma:
@@ -660,7 +660,7 @@ safe.isUserLogged = function(paramsObject, request, response) {
 	var tokenUserAndTimestampAndProfile = realToken.split("@");
 	
 	
-	// testa se o usu·rio do token È igual ao usu·rio mandado no header e testa se o hor·rio agora j· ultrapassou o do permitido pelo token
+	// testa se o usu√°rio do token √© igual ao usu√°rio mandado no header e testa se o hor√°rio agora j√° ultrapassou o do permitido pelo token
 	if(tokenUserAndTimestampAndProfile.length != 3 || tokenUserAndTimestampAndProfile[0] != userAndToken[0] || Number(tokenUserAndTimestampAndProfile[1]) < (new Date()).getTime()) {
 		http.response.setStatus(401);
 		return false;
@@ -719,5 +719,5 @@ print("security.js loaded ......................................................
 
 ~~~
 
-OBS: Vale lembrar que no front end enviamos, junto com todas requisiÁıes, um header chamado 'Authorization' que possui o tipo de autorizaÁ„o, o nome do usu·rio e o token de acesso.
-Esse header È usado pelo security para identificar o usu·rio e para conferir se o token de acesso È v·lido.
+OBS: Vale lembrar que no front end enviamos, junto com todas requisi√ß√µes, um header chamado 'Authorization' que possui o tipo de autoriza√ß√£o, o nome do usu√°rio e o token de acesso.
+Esse header √© usado pelo security para identificar o usu√°rio e para conferir se o token de acesso √© v√°lido.
