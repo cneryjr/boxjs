@@ -1,162 +1,344 @@
-boxJS v.0.4.0
-============
+# boxJS
 
-boxJS is a container for the application / interpretation JavaScript from the Web server, or is a Server-side JavaScript or (SSJS). It allows code written in JavaScript to be interpreted by the Web server, the same way as with PHP, for example.
-boxJS it's run in Nashorn (Java 8 Javascript engine) and allow to debug Javascript source code in server side.
-
-## What's new?
-
-* v.0.4.0 - The interpretation Javascript engine was swapped from Rhino to Nashorn (Java 8)
-* v.0.3.0 - Routing module released.
-* v.0.2.9 - Security module released.
-* v.0.2.8 - Database module improvemented.
-* v.0.2.7 - Dynamic loading of modules.
+O boxJS é um container de execução JavaScript para servidores Web, 
+ou seja, é uma plataforma Server-Side JavaScript(SSJS).
 
 
-## Tutorial
+## Primeiros Passos
+
+Depois de [configurar o seu ambiente para o funcionamento do boxJS](#configurando-o-ambiente-de-desenvolvimento), já podemos criar 
+nosso primeiro arquivo javascript que será executado pelo servidor. Podemos chamá-lo de 'hello.js' e escreveremos apenas o seguinte código nele:
+
+~~~ javascript
+
+exports = {
+	world: function (params,request,response) {
+		response.write("<html><body> <h1>Hello world!</h1> </body></html>");
+	}
+}
+
+~~~
 
 
-#### 1st Step
-It's create a simple web application in NetBeans using Tomcat servlet container 7.x or 8.x. Follow [this](https://netbeans.org/kb/docs/web/quickstart-webapps.html) tutorial.
+Agora, já podemos acessar nossa primeira página fornecida via boxJS através da seguinte URL `localhost:8080/<nome_do_projeto>/boxjs/hello/world`.
+
+![Browser](imagens/browser_com_primeira_pagina.png)
+
+## Precisando de Ajuda?
+
+Envie-nos um [e-mail](mailto:suporteboxjs@softbox.com.br)
+
+Faça perguntas no Stackoverflow usando a [tag boxJS](http://pt.stackoverflow.com/questions/tagged/boxjs)
 
 
-#### 2nd Step 
-Copy directory 'boxjs' into the folder "/Web Pages" and copy the files boxjs.jar, servlet-api.3.0.jar and tomcat-jdbc.jar to /WEB-INF/lib, as shown in the figure below.
+## Vantagens
 
-![Softbox F01](https://raw.github.com/cneryjr/boxjs/master/docs/images/helloWorld01.png)
+* SSJS baseado em threads
+* Performático
+* Fácil aprendizado
+* Simples de usar
+* Bom conjunto de APIs para utilização imediata
+* 'Handler' único que trata todas as requisições vindas do cliente web (browser)
 
-
-#### 3rd Step
-
-Create a file named 'hello.js' within the boxjs ("/HelloWorld/web/boxjs") directory, copy and paste the code below:
-
-``` javascript
-
-print("Hello World!");
-
-console.log("Running hello.js...");
-
-http.response.write("<html> <head><title>hello.js</title></head> " 
-    + "<body> <h1> Hello at " + new Date() + " from " + http.request.requestURI
-    + " </h1> <hr>" + "" + "<br>" + "<hr> </body> </html>");
-    
-print("-- hello.js [finished] --------------------------------------------");
-    
-```
-
-### <div style="color: #FF0000">Is outdated and will be fixed in the coming days.<br/></div>
-
-#### 4th Step
-
-Select the project 'tutorial' tab 'Project Explorer' and press the "Alt + Enter".
-Select the "Java Build Path" in the left pane and then select the tab "Order and Export".
-Select the combobox related to "Web App Libraries" and click "OK".
-
-![Softbox F02](https://raw.github.com/cneryjr/boxjs/master/docs/images/tutorial_fig02.png)
+## Sumário
 
 
-#### 5th Step
-Start the project in eclipse and open the following URL in the browser http://localhost:8080/tutorial/boxjs/hello.js?param1=test
+* [Configurando o ambiente de desenvolvimento](#configurando-o-ambiente-de-desenvolvimento)
+* [Configurando o `config.js`](#configurando-o-configjs)
+* [Configurando rotas](#configurando-rotas)
+* [Utilizando o `security.js`](#utilizando-o-securityjs)
+* [MongoDB](#mongodb)
+  * [Preparando para usar o MongoDB](#preparando-para-usar-o-mongodb)
+  * [Usando o MongoDB](#usando-o-mongodb)
 
-Have fun!
-
-## Documentation
-
-<div class="summary docProperty">
-<h3 class="">Public Variables</h3>
-
-<table class="">
-<colgroup>
-    <col class="col-property">
-	<col class="col-type">
-	<col class="col-description">
-</colgroup>
-<tbody><tr>
-  <th>Property</th><th>Type</th><th>Description</th>
-</tr>
-<tr style="background-color: #F8F8F8; border-top: 1px solid #DDDDDD;" id="actionPrefix">
-  <td style="color: #4183C4;">global</td>
-  <td>Object</td>
-  <td>Cont&eacute;m vari&aacute;veis ambientais como scope, request etc.</td>
-</tr>
-</tbody></table>
-</div>
-
-<h3 style="color: #4183C4; border-bottom: 2px dotted #4183C4; margin-right: 200px">namespace http</h3>
-
-<div class="summary docNamespaces">
-<h4>Public Functions</h4>
-
-<table class="summaryTable">
-<colgroup>
-	<col class="col-property">
-	<col class="col-type">
-	<col class="col-description">
-</colgroup>
-<tbody><tr>
-  <th>Function</th><th>Return</th><th>Description</th>
-</tr>
-<tr style="background-color: #f8f8f8; border-top: 1px solid #DDDDDD;" id="actionPrefix">
-  <td style="color: #4183C4;">parseParams</td>
-  <td>Object</td>
-  <td>Executa o parse dos par&acirc;metros enviados em uma requisi&ccedil;&atilde;o de GET ou POST, retornando-os em um objeto JSON com chave e valor.<br>
-      <span style="color:#4183C4 ">Parameters: <br></span>
-      <span style="margin-left: 30px">queryString {String} - cont&eacute;m os par&acirc;metros da chamada URL.</span><br>
-      <span style="color:#4183C4 ">Example: <br></span>
-      <span style="margin-left: 30px">var qrys = http.parseParams(global.queryString || "");</span>
-   </td>
-</tr>
-<trstyle="background-color: #FFFFFF; border-top: 1px solid #CCCCCC;" id="actionPrefix">
-  <td style="color: #4183C4;">uploadFile</td>
-  <td>none</td>
-  <td>Executa o upload de um arquivo a partir do client web e salva no servidor.<br>
-      <span style="color:#4183C4 ">Parameters: <br></span>
-      <span style="margin-left: 30px">path {String} - caminho onde o arquivo deve ser salvo.</span><br>
-     <span style="color:#4183C4 ">Example: <br></span>
-     <span style="margin-left: 30px">http.uploadFile("/temp/");</span>
-  </td>
-</tr>
-</tbody></table>
-</div>
-
-<h3 style="color: #4183C4; border-bottom: 2px dotted #4183C4; margin-right: 200px">namespace db</h3>
-
-<div class="summary docNamespaces">
-<h4>Public Variables</h4>
-
-<table style="border: 1px solid #DDDDDD">
-<colgroup>
-	<col class="col-property">
-	<col class="col-type">
-	<col class="col-description">
-</colgroup>
-<tbody><tr>
-  <th>Function</th><th>Type</th><th>Description</th>
-</tr>
-<tr style="background-color: #f8f8f8; border-top: 1px solid #DDDDDD;" id="actionPrefix">
-  <td style="color: #4183C4;">Database</td>
-  <td>Object</td>
-  <td>Objeto com métodos de controle de transação e execução de comandos DML (insert, update, delete and select).
-   </td>
-</tr>
-<trstyle="background-color: #FFFFFF; border-top: 1px solid #CCCCCC;" id="actionPrefix">
-  <td style="color: #4183C4;">Table</td>
-  <td>Object</td>
-  <td>Classe que representa uma tabela do banco de dados.<br>
-      <span style="color:#4183C4 ">Parameters: <br></span>
-      <span style="margin-left: 30px">name{String} - nome da tabela a ser manipulada.</span><br>
-     <span style="color:#4183C4 "><br></span>
-     <span style="margin-left: 30px"></span>
-  </td>
-</tr>
-</tbody></table>
-</div>
+## Configurando o ambiente de desenvolvimento
 
 
-## License
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Para começarmos a trabalhar com o boxJS precisamos, antes de mais nada, fazer algumas configurações no nosso ambiente de 
+desenvolvimento. Começamos criando um Dynamic Web Project:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+![Criando projeto](imagens/fistProject/criando_projeto1.png)
 
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+![Criando projeto](imagens/fistProject/criando_projeto2.png)
 
+Neste passo é importante checar se o Tomcat esta selecionado e clicar para ir para o próximo, ao invés de finalizar, conforme 
+imagem abaixo:
+
+![Configuracao novo projeto](imagens/fistProject/criando_projeto3.png)
+
+Nesta tela não há necessidade de modificar nada, apenas siga para a próxima.
+
+![Configuracao novo projeto](imagens/fistProject/criando_projeto4.png)
+
+Nesta parte é importante marcar a opção de gerar o web.xml automaticamente, conforme imagem abaixo:
+
+![Configuracao novo projeto](imagens/fistProject/criando_projeto5.png)
+
+Pronto, temos nosso primeiro projeto criado, porém o boxJS ainda não funcionará, precisamos fazer apenas mais uma configuração.
+
+Adicionaremos à pasta `lib`, que está dentro da pasta `WEB-INF`, que, por sua vez, está dentro da pasta `WebContent`, o [jar do boxJS](https://github.com/cneryjr/boxjs/blob/master/lib/boxjs.jar?raw=true),
+do [Tomcat](https://github.com/cneryjr/boxjs/blob/master/lib/tomcat-jdbc.jar?raw=true) e da [api de servlet](https://github.com/cneryjr/boxjs/blob/master/lib/servlet-api-3.0.jar?raw=true), conforme imagem abaixo:
+
+![Jars na pasta lib](imagens/fistProject/criando_projeto6.png)
+
+
+
+Feito isso, basta que adicionemos nosso novo projeto ao Tomcat, conforme as imagens abaixo:
+
+![Adicionando projeto ao servidor](imagens/fistProject/criando_projeto7.png)
+
+![Adicionando projeto ao servidor](imagens/fistProject/criando_projeto8.png)
+
+É importante lembrar que todos os arquivos `.js` devem estar dentro da pasta boxjs ou algum subdiretório, conforme a 
+imagem abaixo.
+
+
+![Hello World](imagens/hello_dentro_boxjs.png)
+
+
+Pronto, nosso ambiente já está completamente pronto para funcionar o boxJS!
+
+
+## Configurando o `config.js`
+
+Voce pode ter reparado que o servidor encontrou alguns erros ao subir nosso primeiro projeto, isso aconteceu pois
+toda vez que o boxJS é instanciado ele procura pelo arquivo `config.js` dentro da pasta `boxjs`, este arquivo
+contém configurações a serem executadas assim que o box é instanciado.
+
+Um exemplo do que é possível fazer com essas configurações é a inclusão de módulos, que devem seguir o seguinte
+padrão.
+
+~~~ javascript
+
+var config = {
+	modules: ["routes", "mongodb", "io", "binary", "jsrender","init"]
+};
+
+~~~
+
+
+Para alguns módulos, como por exemplo o mongodb, é necessário que se inclua mais algumas configurações. No caso
+do mongo, é necessário citar o link com o banco, o que deve deixar nosso `config.js` da seguinte forma:
+
+
+~~~ javascript
+
+var config = {
+	modules: ["routes", "mongodb", "io", "binary", "jsrender","init"],
+	
+	mongodb: {
+		datasource: "java:comp/env/mongo/MongoDSFactory"
+	}	
+};
+
+~~~
+
+OBS: Além disso, para utilizarmos o mongo é necessário criar o datasource no context.xml, isso pode ser feito 
+adicionando a seguite tag (com suas devidas alterações) ao context.xml do Tomcat que rodará seu projeto.
+
+~~~ xml
+<Resource name="mongo/MongoDSFactory" auth="Container"
+type="com.mongodb.MongoClient" factory="softbox.boxjs.MongoDSFactory"
+singleton="false" user="" pass="" uri="mongodb://localhost:27017/nome_do_banco"/>
+
+~~~
+
+
+
+
+
+
+
+
+
+## Configurando rotas
+
+Além das páginas html que estão na pasta `WebContent` que são fornecidas normalmente pelo Tomcat, já sabemos que é possivel
+fornecer páginas através de comandos Javascript desde que os arquivos com estes comandos estejam dentro da pasta `boxjs`. 
+Outra possibilidade que o boxJS traz é o uso de rotas, essas rotas podem ser definidas no arquivo `config.js`, do qual [já 
+falamos anteriormente](#configurando-o-configjs), ou em um outro arquivo qualquer, desde que este seja adicionado como 
+módulo no `config.js`. Consideramos o segundo modo o mais correto e é ele que pode ser encontrado no exemplo abaixo:
+
+Primeiro devemos criar nosso arquivo `config.js`, nele incluiremos apenas o nosso módulo `routes`:
+
+~~~ javascript
+
+var config = {
+	modules: ["routes"]
+};
+
+~~~
+
+![Configjs](imagens/img-config-js-na-pasta.png)
+
+
+Agora podemos criar o arquivo `routes.js` que irá conter nossas rotas:
+
+
+~~~ javascript
+
+Router.add( 'hello', 'actions/hello');
+
+Router.add( 'bye', 'actions/bye');
+
+~~~
+
+![Routesjs](imagens/img-routes-js-na-pasta.png)
+
+Os argumentos da função add, usada acima, são, respectivamente, o Url pattern daquela rota e o arquivo JS que responderá às requisições que
+chegarem nela (o caminho deste arquivo é apartir da pasta `boxjs`).
+
+
+No arquivo JavaScript dado como segundo argumento deve ser definido um objeto `exports` que terá como propriedade o que será suportado
+no restante da URL, cada uma dessas propriedades é na verdade uma função que lida com a requisição do usuário.
+
+Para o nosso exemplo, criamos o `hello.js` com o seguinte código:
+
+~~~ javascript
+
+exports = {
+	modern: function (params,request,response) {
+		response.write("<html><body> <h1>Hey route!</h1> </body></html>");
+	},
+	std: function (params,request,response) {
+		response.write("<html><body> <h1>Hello route!</h1> </body></html>");
+	}
+}
+
+~~~
+
+E o `bye.js` com:
+
+~~~ javascript
+
+exports = {
+	std: function (params,request,response) {
+		response.write("<html><body> <h1>Bye route!</h1> </body></html>");
+	}
+}
+
+~~~
+
+![Byeehello](imagens/img-bye-e-hello-js-na-pasta.png)
+
+Agora podemos acessar cada um desses métodos, respectivamente, com as seguintes URL:
+
+
+![UrlRotesBrowser](imagens/acessando-url-routes.png)
+
+
+
+
+## Utilizando o `security.js`
+
+Caso algum módulo com o nome de `security` seja adicionado ao `config.js`, o boxJS garante que todas as requisições, passem, 
+primeiramente, por este módulo, isso possibilita que seja criado algum tipo de restrição de acesso, onde uma certa página só será 
+fornecida pelo servidor caso as restrições impostas pelo módulo `security` sejam atingidas.
+
+Por padrão o arquivo security vem conforme [descrito aqui](https://github.com/cneryjr/boxjs/blob/master/boxjs/modules/security.js), ou seja, autorizando todo e qualquer acesso, porém 
+tornar alguma página inacessível é uma tarefa simples.
+
+Podemos tornar a página `localhost:8080/helloWorld/boxjs/hello/modern` inacessível fazendo as seguintes alterações ao `security.js` padrão:
+
+~~~ javascript
+
+safe.hasPermissionInThisMethod = function (paramsObject, request, response, methodName) {
+
+	if(methodName=="modern") {
+		http.response.setStatus(403);
+		return false;
+	}
+	
+    return true;
+};
+
+
+~~~
+
+Lembramos que o `security.js` que vai junto com o boxJS é apenas um esboço de um módulo de segurança, quem o utiliza tem liberdade para 
+(e deve) alterar o seu funcionamento.
+
+OBS: Para pegar um header de uma requisição, basta usar o seguinte método `http.requestJava.getHeader("nome-do-header")`.
+
+
+
+## MongoDB
+
+
+### Preparando para usar o MongoDB
+
+Como citado na parte de [como usar o `config.js`](#configurando-o-configjs), para usarmos o mongoDB o primeiro passo é adicioná-lo aos
+módulos no `config.js` e citar o link com o banco:
+
+~~~ javascript
+
+var config = {
+	modules: ["mongodb"],
+
+	mongodb: {
+		datasource: "java:comp/env/mongo/MongoDSFactory"
+	}
+};
+
+~~~
+
+
+Após modificar o `config.js` para ter estas configurações, devemos adicionar o datasource ao nosso servidor, isso pode ser feito adicionando
+a seguinte tag ao context.xml:
+
+~~~ xml
+
+<Resource name="mongo/MongoDSFactory" auth="Container"
+type="com.mongodb.MongoClient" factory="softbox.boxjs.MongoDSFactory"
+singleton="false" user="" pass="" uri="mongodb://localhost:27017/nome_do_banco"/>
+
+~~~
+
+![DatasourceNoContext](imagens/datasource-no-context.png)
+
+
+Agora adicione [o módulo do mongo](https://raw.githubusercontent.com/cneryjr/boxjs/master/boxjs/modules/mongodb.js) a sua pasta `modules`.
+
+![DatasourceNoContext](imagens/mongodb-no-modules.png)
+
+
+Finalmente, adicione o [jar do driver de conexão ao mongo](https://github.com/cneryjr/boxjs/blob/master/lib/mongo-java-driver-2.12.3.jar?raw=true) à pasta `lib` do `WEB-INF` e tudo deve funcionar normalmente.
+
+
+### Usando o MongoDB
+
+Para usar o MongoDB recomendamos a criação de um módulo `init.js`, com apenas o seguinte código:
+
+
+~~~ javascript
+
+db = db || {};
+
+db.nome_do_banco = function() {
+	return db.MongoDB.getDB("nome_do_banco");
+}
+
+~~~
+
+Esse módulo init deve ser adicionado ao `config.js` e é importante para garantir que não serão criadas múltiplas conexões com o banco, com este passo pronto, basta que,
+quando for necessário acessar uma collection, seja utilizado um código semelhante a:
+
+~~~ javascript
+
+var collection = db.nome_do_banco().getCollection("nome_da_collection");
+
+~~~
+
+Com uma collection em mãos uma variedade de operações pode ser utilizada:
+
+* insert(doc) - insere um documento a uma collection
+* find(query,fields) - executa a 'query' na collection retornando apenas os campos determinados em 'fields'
+* count(query) - conta quantos documentos são compatíveis com 'query', sem carregá-los
+* distinct(field, query) - retorna os valores que um determinado campo, 'field', assume, caso haja uma 'query', só retorna os valores distintos para esta 'query'
+* remove(query) - remove as emtradas que são compatíveis com 'query'
+* update(query,update,options) - atualiza as entradas que são compatíveis com 'query' para o valor 'update', sendo possível utilizar duas configurações opcionais:
+  * upsert - caso nenhuma entrada seja compatível com 'query', invés de atualizar, insere uma nova entrada
+  * multi - atualiza todas as entradas compatíveis com 'query'
+* aggregate - http://docs.mongodb.org/manual/aggregation/
+
+Mais detalhes podem ser vistos no próprio código comentado do módulo do mongo que você adicionou a sua pasta `modules`.
