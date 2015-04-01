@@ -12,7 +12,7 @@ alguma aplicação, então, para fixar o que foi ensinado sobre o boxJS até o m
 * [Back End com boxJS](#back-end-com-boxjs)
   * [`routes.js`](#routesjs) 
   * [`leilao.js` e `usuario.js`](#leilaojs-e-usuariojs)
-    * [leilao/inserir](#leilaoinserir)
+    * [leilao/inserir](#leilaoinserir)c
     * [leilao/buscar](#leilaobuscar)
     * [leilao/darlance](#leilaodarlance)
     * [leilao/fechar](#leilaofechar)
@@ -506,7 +506,7 @@ exports = {
 
 ~~~
 
-Há uma pequena diferença entre os códigos de cada método e o código que os unifica. Como o acesso a collection a qual o arquivo é referente será feito por praticamente todos os seus métodos
+Há uma pequena diferença entre os códigos de cada método e o código que os unifica. Como o acesso a collection a qual o arquivo é referente será feito por praticamente todos os seus métodos,
 colocamos esse acesso fora de um método especifico.
 
 
