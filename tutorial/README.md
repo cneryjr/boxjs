@@ -1,6 +1,6 @@
 # Tutorial Leilão boxJS
 
-Uma das formas mais comum de nós, programadores, aprendermos a programar em uma nova linguagem ou um novo framework, é usando-o para desenvolver
+Uma das formas mais comum de nós, programadores, aprendermos a programar em uma nova linguagem ou com um novo framework, é usando-o para desenvolver
 alguma aplicação, então, para fixar o que foi ensinado sobre o boxJS até o momento, propomos a construção de uma simples aplicação web de leilões online.
 
 
@@ -37,7 +37,7 @@ conhecimento básico delas.
 
 ### Front End
 
-Como nosso objetivo é focar no aprendizado do boxJS, a parte front end do nosso leilão já está pronta para download [clicando aqui](https://www.dropbox.com/s/xyo3b8cgra6oq4u/leilaoBoxJS.rar?dl=0), 
+Como nosso objetivo é focar no aprendizado do boxJS, a parte front end do nosso leilão já está pronta para download [clicando aqui](https://github.com/cneryjr/boxjs/blob/master/tutorial/leilaoBoxJS.rar), 
 mas você esta livre caso prefira implementá-la, apenas certifique-se que o front end esteja utilizando corretamente o boxJS (para isso recomendamos que você faça o 
 download e veja como nós acessamos o back end).
 
@@ -551,7 +551,7 @@ exports = {
 	login: function (params,request,response) {
 		var search = colUsuario.find( { "_id": params.user, "senha": params.pass } );
 		if(search.hasNext()) {
-			var newDateObj = (new Date()).getTime() + 30*60000; // token durara por 30 minutos
+			var newDateObj = (new Date()).getTime() + 30*60000; // token durará por 30 minutos
 			var token = params.user + "@" + newDateObj + '@' + search.next().tipo;
 			var tokenToSend = (CryptoJS.AES.encrypt(token,config.serverKey)).toString();
 			response.write(JSON.stringify({error: false, accessToken: tokenToSend, userName: params.user, timestamp: newDateObj }));
@@ -660,7 +660,7 @@ safe.isUserLogged = function(paramsObject, request, response) {
 	var tokenUserAndTimestampAndProfile = realToken.split("@");
 	
 	
-	// testa se o usuario do token eh igual ao usuario mandado no header e testa se o horario agora já ultrapassou o do permitido pelo token
+	// testa se o usuário do token é igual ao usuário mandado no header e testa se o horário agora já ultrapassou o do permitido pelo token
 	if(tokenUserAndTimestampAndProfile.length != 3 || tokenUserAndTimestampAndProfile[0] != userAndToken[0] || Number(tokenUserAndTimestampAndProfile[1]) < (new Date()).getTime()) {
 		http.response.setStatus(401);
 		return false;
