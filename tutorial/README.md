@@ -259,7 +259,7 @@ Retorna: Informa se a adição do lance falhou ou não.
 
 Regras de negócio:
 
-- Para um lance ser aceito ele deve ser maior que o mínimo e maior que o lance anterior, caso ele exista.
+- Para um lance ser aceito ele deve ser maior que o valor mínimo do leilão e maior que o lance anterior, caso exista algum.
 
 Código:
 
@@ -328,7 +328,7 @@ fechar: function (params,request,response) {
 
 #### usuario/tela
 
-Objetivo: Verificar se a tela de usuario pode ser acessada pelo usuario atual.
+Objetivo: Verificar se a tela de usuário pode ser acessada pelo usuário atual.
 
 Retorna: Libera o acesso para a tela.
 
@@ -353,7 +353,7 @@ Objetivo: Inserir um novo usuário ao banco.
 
 Parâmetros: Usuário a ser inserido.
 
-Retorna: Informa se a inserção do usuario falhou ou não.
+Retorna: Informa se a inserção do usuário falhou ou não.
 
 Regras de negócio:
 
