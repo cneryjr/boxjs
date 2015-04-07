@@ -1,13 +1,13 @@
 # boxJS
 
-O boxJS È um container de execuÁ„o JavaScript para servidores Web, 
-ou seja, È uma plataforma Server-Side JavaScript(SSJS).
+O boxJS √© um container de execu√ß√£o JavaScript para servidores Web, 
+ou seja, √© uma plataforma Server-Side JavaScript(SSJS).
 
 
 ## Primeiros Passos
 
-Depois de [configurar o seu ambiente para o funcionamento do boxJS](https://github.com/cneryjr/boxjs/tree/master/configurar-ambiente), j· podemos criar 
-nosso primeiro arquivo javascript que ser· executado pelo servidor. Podemos cham·-lo de 'hello.js' e escreveremos apenas o seguinte cÛdigo nele:
+Depois de [configurar o seu ambiente para o funcionamento do boxJS](https://github.com/cneryjr/boxjs/tree/master/configurar-ambiente), j√° podemos criar 
+nosso primeiro arquivo javascript que ser√° executado pelo servidor. Podemos cham√°-lo de 'hello.js' e escreveremos apenas o seguinte c√≥digo nele:
 
 ~~~ javascript
 
@@ -20,7 +20,7 @@ exports = {
 ~~~
 
 
-Agora, j· podemos acessar nossa primeira p·gina fornecida via boxJS atravÈs da seguinte URL `localhost:8080/<nome_do_projeto>/boxjs/hello/world`.
+Agora, j√° podemos acessar nossa primeira p√°gina fornecida via boxJS atrav√©s da seguinte URL `localhost:8080/<nome_do_projeto>/boxjs/hello/world`.
 
 ![Browser](imagens/browser_com_primeira_pagina.png)
 
@@ -28,20 +28,20 @@ Agora, j· podemos acessar nossa primeira p·gina fornecida via boxJS atravÈs da s
 
 Envie-nos um [e-mail](mailto:suporteboxjs@softbox.com.br)
 
-FaÁa perguntas no Stackoverflow usando a [tag boxJS](http://pt.stackoverflow.com/questions/tagged/boxjs)
+Fa√ßa perguntas no Stackoverflow usando a [tag boxJS](http://pt.stackoverflow.com/questions/tagged/boxjs)
 
-Construa sua primeira aplicaÁ„o usando o boxJS com [nosso tutorial](https://github.com/cneryjr/boxjs/tree/master/tutorial)
+Construa sua primeira aplica√ß√£o usando o boxJS com [nosso tutorial](https://github.com/cneryjr/boxjs/tree/master/tutorial)
 
 ## Vantagens
 
 * SSJS baseado em threads
-* Perform·tico
-* F·cil aprendizado
+* Perform√°tico
+* F√°cil aprendizado
 * Simples de usar
-* Bom conjunto de APIs para utilizaÁ„o imediata
-* 'Handler' ˙nico que trata todas as requisiÁıes vindas do cliente web (browser)
+* Bom conjunto de APIs para utiliza√ß√£o imediata
+* 'Handler' √∫nico que trata todas as requisi√ß√µes vindas do cliente web (browser)
 
-## Sum·rio
+## Sum√°rio
 
 
 * [Configurando o `config.js`](#configurando-o-configjs)
@@ -54,11 +54,11 @@ Construa sua primeira aplicaÁ„o usando o boxJS com [nosso tutorial](https://gith
 ## Configurando o `config.js`
 
 Voce pode ter reparado que o servidor encontrou alguns erros ao subir nosso primeiro projeto, isso aconteceu pois
-toda vez que o boxJS È instanciado ele procura pelo arquivo `config.js` dentro da pasta `boxjs`, este arquivo
-contÈm configuraÁıes a serem executadas assim que o box È instanciado.
+toda vez que o boxJS √© instanciado ele procura pelo arquivo `config.js` dentro da pasta `boxjs`, este arquivo
+cont√©m configura√ß√µes a serem executadas assim que o box √© instanciado.
 
-Um exemplo do que È possÌvel fazer com essas configuraÁıes È a inclus„o de mÛdulos, que devem seguir o seguinte
-padr„o.
+Um exemplo do que √© poss√≠vel fazer com essas configura√ß√µes √© a inclus√£o de m√≥dulos, que devem seguir o seguinte
+padr√£o.
 
 ~~~ javascript
 
@@ -69,8 +69,8 @@ var config = {
 ~~~
 
 
-Para alguns mÛdulos, como por exemplo o mongodb, È necess·rio que se inclua mais algumas configuraÁıes. No caso
-do mongo, È necess·rio citar o link com o banco, o que deve deixar nosso `config.js` da seguinte forma:
+Para alguns m√≥dulos, como por exemplo o mongodb, √© necess√°rio que se inclua mais algumas configura√ß√µes. No caso
+do mongo, √© necess√°rio citar o link com o banco, o que deve deixar nosso `config.js` da seguinte forma:
 
 
 ~~~ javascript
@@ -85,8 +85,8 @@ var config = {
 
 ~~~
 
-OBS: AlÈm disso, para utilizarmos o mongo È necess·rio criar o datasource no context.xml, isso pode ser feito 
-adicionando a seguite tag (com suas devidas alteraÁıes) ao context.xml do Tomcat que rodar· seu projeto.
+OBS: Al√©m disso, para utilizarmos o mongo √© necess√°rio criar o datasource no context.xml, isso pode ser feito 
+adicionando a seguite tag (com suas devidas altera√ß√µes) ao context.xml do Tomcat que rodar√° seu projeto.
 
 ~~~ xml
 <Resource name="mongo/MongoDSFactory" auth="Container"
@@ -105,13 +105,13 @@ singleton="false" user="" pass="" uri="mongodb://localhost:27017/nome_do_banco"/
 
 ## Configurando rotas
 
-AlÈm das p·ginas html que est„o na pasta `WebContent` que s„o fornecidas normalmente pelo Tomcat, j· sabemos que È possivel
-fornecer p·ginas atravÈs de comandos Javascript desde que os arquivos com estes comandos estejam dentro da pasta `boxjs`. 
-Outra possibilidade que o boxJS traz È o uso de rotas, essas rotas podem ser definidas no arquivo `config.js`, do qual [j· 
+Al√©m das p√°ginas html que est√£o na pasta `WebContent` que s√£o fornecidas normalmente pelo Tomcat, j√° sabemos que √© possivel
+fornecer p√°ginas atrav√©s de comandos Javascript desde que os arquivos com estes comandos estejam dentro da pasta `boxjs`. 
+Outra possibilidade que o boxJS traz √© o uso de rotas, essas rotas podem ser definidas no arquivo `config.js`, do qual [j√° 
 falamos anteriormente](#configurando-o-configjs), ou em um outro arquivo qualquer, desde que este seja adicionado como 
-mÛdulo no `config.js`. Consideramos o segundo modo o mais correto e È ele que pode ser encontrado no exemplo abaixo:
+m√≥dulo no `config.js`. Consideramos o segundo modo o mais correto e √© ele que pode ser encontrado no exemplo abaixo:
 
-Primeiro devemos criar nosso arquivo `config.js`, nele incluiremos apenas o nosso mÛdulo `routes`:
+Primeiro devemos criar nosso arquivo `config.js`, nele incluiremos apenas o nosso m√≥dulo `routes`:
 
 ~~~ javascript
 
@@ -124,7 +124,7 @@ var config = {
 ![Configjs](imagens/img-config-js-na-pasta.png)
 
 
-Agora podemos criar o arquivo `routes.js` que ir· conter nossas rotas:
+Agora podemos criar o arquivo `routes.js` que ir√° conter nossas rotas:
 
 
 ~~~ javascript
@@ -137,14 +137,14 @@ Router.add( 'bye', 'actions/bye');
 
 ![Routesjs](imagens/img-routes-js-na-pasta.png)
 
-Os argumentos da funÁ„o add, usada acima, s„o, respectivamente, o Url pattern daquela rota e o arquivo JS que responder· ‡s requisiÁıes que
-chegarem nela (o caminho deste arquivo È apartir da pasta `boxjs`).
+Os argumentos da fun√ß√£o add, usada acima, s√£o, respectivamente, o Url pattern daquela rota e o arquivo JS que responder√° √†s requisi√ß√µes que
+chegarem nela (o caminho deste arquivo √© apartir da pasta `boxjs`).
 
 
-No arquivo JavaScript dado como segundo argumento deve ser definido um objeto `exports` que ter· como propriedade o que ser· suportado
-no restante da URL, cada uma dessas propriedades È na verdade uma funÁ„o que lida com a requisiÁ„o do usu·rio.
+No arquivo JavaScript dado como segundo argumento deve ser definido um objeto `exports` que ter√° como propriedade o que ser√° suportado
+no restante da URL, cada uma dessas propriedades √© na verdade uma fun√ß√£o que lida com a requisi√ß√£o do usu√°rio.
 
-Para o nosso exemplo, criamos o `hello.js` com o seguinte cÛdigo:
+Para o nosso exemplo, criamos o `hello.js` com o seguinte c√≥digo:
 
 ~~~ javascript
 
@@ -173,7 +173,7 @@ exports = {
 
 ![Byeehello](imagens/img-bye-e-hello-js-na-pasta.png)
 
-Agora podemos acessar cada um desses mÈtodos, respectivamente, com as seguintes URL:
+Agora podemos acessar cada um desses m√©todos, respectivamente, com as seguintes URL:
 
 
 ![UrlRotesBrowser](imagens/acessando-url-routes.png)
@@ -183,14 +183,14 @@ Agora podemos acessar cada um desses mÈtodos, respectivamente, com as seguintes 
 
 ## Utilizando o `security.js`
 
-Caso algum mÛdulo com o nome de `security` seja adicionado ao `config.js`, o boxJS garante que todas as requisiÁıes, passem, 
-primeiramente, por este mÛdulo, isso possibilita que seja criado algum tipo de restriÁ„o de acesso, onde uma certa p·gina sÛ ser· 
-fornecida pelo servidor caso as restriÁıes impostas pelo mÛdulo `security` sejam atingidas.
+Caso algum m√≥dulo com o nome de `security` seja adicionado ao `config.js`, o boxJS garante que todas as requisi√ß√µes, passem, 
+primeiramente, por este m√≥dulo, isso possibilita que seja criado algum tipo de restri√ß√£o de acesso, onde uma certa p√°gina s√≥ ser√° 
+fornecida pelo servidor caso as restri√ß√µes impostas pelo m√≥dulo `security` sejam atingidas.
 
-Por padr„o o arquivo security vem conforme [descrito aqui](https://github.com/cneryjr/boxjs/blob/master/boxjs/modules/security.js), ou seja, autorizando todo e qualquer acesso, porÈm 
-tornar alguma p·gina inacessÌvel È uma tarefa simples.
+Por padr√£o o arquivo security vem conforme [descrito aqui](https://github.com/cneryjr/boxjs/blob/master/boxjs/modules/security.js), ou seja, autorizando todo e qualquer acesso, por√©m 
+tornar alguma p√°gina inacess√≠vel √© uma tarefa simples.
 
-Podemos tornar a p·gina `localhost:8080/helloWorld/boxjs/hello/modern` inacessÌvel fazendo as seguintes alteraÁıes ao `security.js` padr„o:
+Podemos tornar a p√°gina `localhost:8080/helloWorld/boxjs/hello/modern` inacess√≠vel fazendo as seguintes altera√ß√µes ao `security.js` padr√£o:
 
 ~~~ javascript
 
@@ -207,10 +207,10 @@ safe.hasPermissionInThisMethod = function (paramsObject, request, response, meth
 
 ~~~
 
-Lembramos que o `security.js` que vai junto com o boxJS È apenas um esboÁo de um mÛdulo de seguranÁa, quem o utiliza tem liberdade para 
+Lembramos que o `security.js` que vai junto com o boxJS √© apenas um esbo√ßo de um m√≥dulo de seguran√ßa, quem o utiliza tem liberdade para 
 (e deve) alterar o seu funcionamento.
 
-OBS: Para pegar um header de uma requisiÁ„o, basta usar o seguinte mÈtodo `http.requestJava.getHeader("nome-do-header")`.
+OBS: Para pegar um header de uma requisi√ß√£o, basta usar o seguinte m√©todo `http.requestJava.getHeader("nome-do-header")`.
 
 
 
@@ -219,8 +219,8 @@ OBS: Para pegar um header de uma requisiÁ„o, basta usar o seguinte mÈtodo `http.
 
 ### Preparando para usar o MongoDB
 
-Como citado na parte de [como usar o `config.js`](#configurando-o-configjs), para usarmos o mongoDB o primeiro passo È adicion·-lo aos
-mÛdulos no `config.js` e citar o link com o banco:
+Como citado na parte de [como usar o `config.js`](#configurando-o-configjs), para usarmos o mongoDB o primeiro passo √© adicion√°-lo aos
+m√≥dulos no `config.js` e citar o link com o banco:
 
 ~~~ javascript
 
@@ -235,7 +235,7 @@ var config = {
 ~~~
 
 
-ApÛs modificar o `config.js` para ter estas configuraÁıes, devemos adicionar o datasource ao nosso servidor, isso pode ser feito adicionando
+Ap√≥s modificar o `config.js` para ter estas configura√ß√µes, devemos adicionar o datasource ao nosso servidor, isso pode ser feito adicionando
 a seguinte tag ao context.xml:
 
 ~~~ xml
@@ -249,17 +249,17 @@ singleton="false" user="" pass="" uri="mongodb://localhost:27017/nome_do_banco"/
 ![DatasourceNoContext](imagens/datasource-no-context.png)
 
 
-Agora adicione [o mÛdulo do mongo](https://raw.githubusercontent.com/cneryjr/boxjs/master/boxjs/modules/mongodb.js) a sua pasta `modules`.
+Agora adicione [o m√≥dulo do mongo](https://raw.githubusercontent.com/cneryjr/boxjs/master/boxjs/modules/mongodb.js) a sua pasta `modules`.
 
 ![DatasourceNoContext](imagens/mongodb-no-modules.png)
 
 
-Finalmente, adicione o [jar do driver de conex„o ao mongo](https://github.com/cneryjr/boxjs/blob/master/lib/mongo-java-driver-2.12.3.jar?raw=true) ‡ pasta `lib` do `WEB-INF` e tudo deve funcionar normalmente.
+Finalmente, adicione o [jar do driver de conex√£o ao mongo](https://github.com/cneryjr/boxjs/blob/master/lib/mongo-java-driver-2.12.3.jar?raw=true) √† pasta `lib` do `WEB-INF` e tudo deve funcionar normalmente.
 
 
 ### Usando o MongoDB
 
-Para usar o MongoDB recomendamos a criaÁ„o de um mÛdulo `init.js`, com apenas o seguinte cÛdigo:
+Para usar o MongoDB recomendamos a cria√ß√£o de um m√≥dulo `init.js`, com apenas o seguinte c√≥digo:
 
 
 ~~~ javascript
@@ -272,8 +272,8 @@ db.nome_do_banco = function() {
 
 ~~~
 
-Esse mÛdulo init deve ser adicionado ao `config.js` e È importante para garantir que n„o ser„o criadas m˙ltiplas conexıes com o banco, com este passo pronto, basta que,
-quando for necess·rio acessar uma collection, seja utilizado um cÛdigo semelhante a:
+Esse m√≥dulo init deve ser adicionado ao `config.js` e √© importante para garantir que n√£o ser√£o criadas m√∫ltiplas conex√µes com o banco, com este passo pronto, basta que,
+quando for necess√°rio acessar uma collection, seja utilizado um c√≥digo semelhante a:
 
 ~~~ javascript
 
@@ -281,16 +281,16 @@ var collection = db.nome_do_banco().getCollection("nome_da_collection");
 
 ~~~
 
-Com uma collection em m„os uma variedade de operaÁıes pode ser utilizada:
+Com uma collection em m√£os uma variedade de opera√ß√µes pode ser utilizada:
 
 * insert(doc) - insere um documento a uma collection
 * find(query,fields) - executa a 'query' na collection retornando apenas os campos determinados em 'fields'
-* count(query) - conta quantos documentos s„o compatÌveis com 'query', sem carreg·-los
-* distinct(field, query) - retorna os valores que um determinado campo, 'field', assume, caso haja uma 'query', sÛ retorna os valores distintos para esta 'query'
-* remove(query) - remove as emtradas que s„o compatÌveis com 'query'
-* update(query,update,options) - atualiza as entradas que s„o compatÌveis com 'query' para o valor 'update', sendo possÌvel utilizar duas configuraÁıes opcionais:
-  * upsert - caso nenhuma entrada seja compatÌvel com 'query', invÈs de atualizar, insere uma nova entrada
-  * multi - atualiza todas as entradas compatÌveis com 'query'
+* count(query) - conta quantos documentos s√£o compat√≠veis com 'query', sem carreg√°-los
+* distinct(field, query) - retorna os valores que um determinado campo, 'field', assume, caso haja uma 'query', s√≥ retorna os valores distintos para esta 'query'
+* remove(query) - remove as emtradas que s√£o compat√≠veis com 'query'
+* update(query,update,options) - atualiza as entradas que s√£o compat√≠veis com 'query' para o valor 'update', sendo poss√≠vel utilizar duas configura√ß√µes opcionais:
+  * upsert - caso nenhuma entrada seja compat√≠vel com 'query', inv√©s de atualizar, insere uma nova entrada
+  * multi - atualiza todas as entradas compat√≠veis com 'query'
 * aggregate - http://docs.mongodb.org/manual/aggregation/
 
-Mais detalhes podem ser vistos no prÛprio cÛdigo comentado do mÛdulo do mongo que vocÍ adicionou a sua pasta `modules`.
+Mais detalhes podem ser vistos no pr√≥prio c√≥digo comentado do m√≥dulo do mongo que voc√™ adicionou a sua pasta `modules`.
