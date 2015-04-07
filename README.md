@@ -6,7 +6,7 @@ ou seja, é uma plataforma Server-Side JavaScript(SSJS).
 
 ## Primeiros Passos
 
-Depois de [configurar o seu ambiente para o funcionamento do boxJS](#configurando-o-ambiente-de-desenvolvimento), já podemos criar 
+Depois de [configurar o seu ambiente para o funcionamento do boxJS](https://github.com/cneryjr/boxjs/tree/master/configurar-ambiente), já podemos criar 
 nosso primeiro arquivo javascript que será executado pelo servidor. Podemos chamá-lo de 'hello.js' e escreveremos apenas o seguinte código nele:
 
 ~~~ javascript
@@ -30,6 +30,7 @@ Envie-nos um [e-mail](mailto:suporteboxjs@softbox.com.br)
 
 Faça perguntas no Stackoverflow usando a [tag boxJS](http://pt.stackoverflow.com/questions/tagged/boxjs)
 
+Construa sua primeira aplicação usando o boxJS com [nosso tutorial](https://github.com/cneryjr/boxjs/tree/master/tutorial)
 
 ## Vantagens
 
@@ -43,61 +44,12 @@ Faça perguntas no Stackoverflow usando a [tag boxJS](http://pt.stackoverflow.com
 ## Sumário
 
 
-* [Configurando o ambiente de desenvolvimento](#configurando-o-ambiente-de-desenvolvimento)
 * [Configurando o `config.js`](#configurando-o-configjs)
 * [Configurando rotas](#configurando-rotas)
 * [Utilizando o `security.js`](#utilizando-o-securityjs)
 * [MongoDB](#mongodb)
   * [Preparando para usar o MongoDB](#preparando-para-usar-o-mongodb)
   * [Usando o MongoDB](#usando-o-mongodb)
-
-## Configurando o ambiente de desenvolvimento
-
-
-Para começarmos a trabalhar com o boxJS precisamos, antes de mais nada, fazer algumas configurações no nosso ambiente de 
-desenvolvimento. Começamos criando um Dynamic Web Project:
-
-![Criando projeto](imagens/firstProject/criando_projeto1.png)
-
-![Criando projeto](imagens/firstProject/criando_projeto2.png)
-
-Neste passo é importante checar se o Tomcat esta selecionado e clicar para ir para o próximo, ao invés de finalizar, conforme 
-imagem abaixo:
-
-![Configuracao novo projeto](imagens/firstProject/criando_projeto3.png)
-
-Nesta tela não há necessidade de modificar nada, apenas siga para a próxima.
-
-![Configuracao novo projeto](imagens/firstProject/criando_projeto4.png)
-
-Nesta parte é importante marcar a opção de gerar o web.xml automaticamente, conforme imagem abaixo:
-
-![Configuracao novo projeto](imagens/firstProject/criando_projeto5.png)
-
-Pronto, temos nosso primeiro projeto criado, porém o boxJS ainda não funcionará, precisamos fazer apenas mais uma configuração.
-
-Adicionaremos à pasta `lib`, que está dentro da pasta `WEB-INF`, que, por sua vez, está dentro da pasta `WebContent`, o [jar do boxJS](https://github.com/cneryjr/boxjs/blob/master/lib/boxjs.jar?raw=true),
-do [Tomcat](https://github.com/cneryjr/boxjs/blob/master/lib/tomcat-jdbc.jar?raw=true) e da [api de servlet](https://github.com/cneryjr/boxjs/blob/master/lib/servlet-api-3.0.jar?raw=true), conforme imagem abaixo:
-
-![Jars na pasta lib](imagens/firstProject/criando_projeto6.png)
-
-
-
-Feito isso, basta que adicionemos nosso novo projeto ao Tomcat, conforme as imagens abaixo:
-
-![Adicionando projeto ao servidor](imagens/firstProject/criando_projeto7.png)
-
-![Adicionando projeto ao servidor](imagens/firstProject/criando_projeto8.png)
-
-É importante lembrar que todos os arquivos `.js` devem estar dentro da pasta boxjs ou algum subdiretório, conforme a 
-imagem abaixo.
-
-
-![Hello World](imagens/hello_dentro_boxjs.png)
-
-
-Pronto, nosso ambiente já está completamente pronto para funcionar o boxJS!
-
 
 ## Configurando o `config.js`
 

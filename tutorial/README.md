@@ -37,7 +37,7 @@ conhecimento básico delas.
 
 ### Front End
 
-Como nosso objetivo é focar no aprendizado do boxJS, a parte front end do nosso leilão já está pronta para download [clicando aqui](https://github.com/cneryjr/boxjs/blob/master/tutorial/leilaoBoxJS.rar), 
+Como nosso objetivo é focar no aprendizado do boxJS, a parte front end do nosso leilão já está pronta para download [clicando aqui](https://github.com/cneryjr/boxjs/blob/master/tutorial/leilaoBoxJS.rar?raw=true), 
 mas você esta livre caso prefira implementá-la, apenas certifique-se que o front end esteja utilizando corretamente o boxJS (para isso recomendamos que você faça o 
 download e veja como nós acessamos o back end).
 
