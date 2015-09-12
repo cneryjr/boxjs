@@ -13,8 +13,8 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
         urlPatterns = "/boxjsdbg/*",
         initParams = {
             @WebInitParam(name = "configFile", value = "config.js")
-        } 
-) 
+        }
+)
 public class BoxJSServletDebug extends BoxJSServlet {
 
     private static final long serialVersionUID = -1L;
